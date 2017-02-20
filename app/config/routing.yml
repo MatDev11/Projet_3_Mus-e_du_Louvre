@@ -1,0 +1,11 @@
+pages:
+    resource: "@PagesBundle/Resources/config/routing.yml"
+    prefix:   /Pages
+
+ticketing:
+    resource: "@TicketingBundle/Resources/config/routing.yml"
+    prefix:   /reservation
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
