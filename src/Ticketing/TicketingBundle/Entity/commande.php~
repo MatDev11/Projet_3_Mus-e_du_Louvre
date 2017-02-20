@@ -1,0 +1,175 @@
+<?php
+
+namespace Ticketing\TicketingBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * commande
+ *
+ * @ORM\Table(name="commande")
+ * @ORM\Entity(repositoryClass="Ticketing\TicketingBundle\Repository\commandeRepository")
+ */
+class commande
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="prix", type="float")
+     */
+    private $prix;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="type_tarif", type="boolean" , nullable=true)
+     */
+    private $type_tarif;
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="date_commande", type="datetime" , nullable=true)
+     */
+    private $date_commande;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="qte_place", type="integer" , nullable=true)
+     */
+    private $qte_place;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="statut", type="string" , nullable=true)
+     */
+    private $statut;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function __construct()
+    {
+        // Par défaut, la date de l'annonce est la date d'aujourd'hui
+        $this->date_commande = new \Datetime();
+    }
+
+    /**
+     * Set prix
+     *
+     * @param float $prix
+     *
+     * @return commande
+     */
+    public function setPrix($prix)
+{
+    $this->prix = $prix;
+
+    return $this;
+}
+
+    /**
+     * Get prix
+     *
+     * @return float
+     */
+    public function getPrix()
+    {
+        return $this->prix;
+    }
+
+
+
+    /**
+     * Set dateCommande
+     *
+     * @param \DateTime $dateCommande
+     *
+     * @return commande
+     */
+    public function setDateCommande($dateCommande)
+    {
+        $this->date_commande = $dateCommande;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCommande
+     *
+     * @return \DateTime
+     */
+    public function getDateCommande()
+    {
+        return $this->date_commande;
+    }
+
+
+    /**
+     * Set QtePlace
+     *
+     * @param integer $QtePlace
+     *
+     * @return commande
+     */
+    public function setQtePlace($qte_place)
+    {
+        $this->qte_place = $qte_place;
+
+        return $this;
+    }
+
+    /**
+     * Get QtePlace
+     *
+     * @return \integer
+     */
+    public function getQtePlace()
+    {
+        return $this->qte_place;
+    }
+
+    /**
+     * Set typeTarif
+     *
+     * @param boolean $typeTarif
+     *
+     * @return commande
+     */
+    public function setTypeTarif($typeTarif)
+    {
+        $this->type_tarif = $typeTarif;
+
+        return $this;
+    }
+
+    /**
+     * Get typeTarif
+     *
+     * @return boolean
+     */
+    public function getTypeTarif()
+    {
+        return $this->type_tarif;
+    }
+}

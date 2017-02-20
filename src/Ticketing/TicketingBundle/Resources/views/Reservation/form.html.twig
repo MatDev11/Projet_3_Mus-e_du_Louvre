@@ -1,0 +1,54 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}{{ parent() }} - Acceiul{% endblock %}
+
+{% block body %}
+
+
+
+     <div class="row">
+      <div class="col-lg-12">
+          <h1>Billettrie</h1>
+      </div>
+  </div>
+
+  <div class="row center">
+          <div class="col-lg-6  ">
+
+             {{ form(form) }}
+
+
+{#  <p class="billet">Billet N°<span class="numBillet">1</span></p>
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+{{ form_errors(form) }}
+
+
+
+{{ form_row(form.nom) }}
+{{ form_row(form.prenom) }}
+<div class="col-xs-12  ">
+{{ form_row(form.dateDeNaissance) }}
+</div>
+{{ form_row(form.pays) }}
+{{ form_row(form.reduction) }}
+<P class="MsgTarifReduit"> Merci de présenter un justificatif à votre enrtée le jour de votre visite.  </P>
+{{ form_row(form.prix,{'attr': {'value': prix }}) }}
+
+<div id="ajout"></div>
+{{ form_widget(form.Valider, {'attr': {'class': 'btn btn-primary'}}) }}
+
+<a href="#" id="add_Test" class="btn btn-default">Test</a>
+  {{ form_end(form) }}#}
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,51 @@
+
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}{{ parent() }} - Acceiul{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Billettrie</h1>
+        </div>
+    </div>
+
+    <div class="row center">
+
+        <div class="col-lg-6   ">
+
+            {{ form_start(form)}}
+            <h3 >Choisir une date :</h3>
+
+            {{ form_errors(form) }}
+
+            <br>
+            <div  id="datepicker"></div>
+            <br>
+            {{ form_row(form.date_commande)}}
+
+
+
+
+                <h3>Choisir le nombre de billet :</h3>
+                <br>
+
+            {{ form_row(form.qte_place) }}
+            {{ form_row(form.type_tarif) }}
+
+            {{ form_widget(form.Valider, {'attr': {'class': 'btn btn-block btn-primary '}}) }}
+
+
+            {{ form_end(form) }}
+            {{ message }}
+
+        </div>
+
+    </div>
+
+
+
+
+{% endblock %}
