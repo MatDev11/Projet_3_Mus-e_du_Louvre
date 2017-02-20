@@ -1,0 +1,7 @@
+pages_cgv:
+    path:     /CGV
+    defaults: { _controller: PagesBundle:Pages:CGV }
+
+pages_mention_legales:
+    path:     /MentionLegales
+    defaults: { _controller: PagesBundle:Pages:MentionLegales }

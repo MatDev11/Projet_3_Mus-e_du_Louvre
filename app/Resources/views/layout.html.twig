@@ -1,0 +1,121 @@
+{# app/Resources/views/layout.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    {#<meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css">#}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+    <title>{% block title %}Billetterie du Louvre{% endblock %}</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    {% block stylesheets %}
+        {% stylesheets
+        'css/style.css'
+        'css/bootstrap-datepicker.min.css'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+        {% endstylesheets %}
+
+    {% endblock %}
+</head>
+
+<body>
+
+
+
+<div class="container">
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="navbar-header">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" > <img   alt="Logo" src="{{ asset('img/logo_Louvre.png')}}" class="pull-left"></a>
+           <a class="navbar-brand Musee"   href="{{ path('ticketing_reservation_home') }}">Musée du louvre</a>
+            </div>
+
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#">HOME</a></li>
+                <li><a href='#'>TARIF</a></li>
+
+                <li><a data-toggle="modal" data-target="#myModal" href=""><i class="fa fa-envelope-o"></i></a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+
+    </nav>
+
+
+        <div id="content" class="col-lg-12">
+            {% block body %}
+            {% endblock %}
+        </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="f">
+    <div class="container">
+        <div class="row centered">
+
+            <div class="col-md-4">
+                <h4>Informations</h4>
+                <ul class="nav nav-stacked">
+                    <li><a href="{{ path('pages_cgv') }}">CGV</a>
+                    <li><a href="{{ path('pages_mention_legales') }}">Mentions légales</a>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <h4>Musée</h4>
+                <p><i class="fa fa-map-marker"></i>&nbsp;Paris 75 000 - 3 rue des jardins</p>
+            </div>
+
+            <div class="col-md-4">
+                <h4>Nous contacter</h4>
+                <p><i class="fa fa-address-book"></i>&nbsp;Tel: 01 35 00 00 00</p>
+                <p><i class="fa fa-print"></i>&nbsp;Fax: 01 35 00 00 00</p>
+            </div>
+        </div>
+    </div>
+</footer><!-- Footer -->
+
+{% block javascripts %}
+    <script
+            src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+
+    {% javascripts
+    'js/bootstrap.min.js'
+    'js/bootstrap-datepicker.js'
+    'js/demo.js'%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+  <script
+            src="//code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
+
+
+    {# <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+       <script src="{{ asset('js/jquery.js') }}"></script>
+       <script src="{{ asset('js/demo.js') }}"></script>
+       <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>#}
+{% endblock %}
+</body>
+</html>
