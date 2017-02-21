@@ -20,9 +20,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class ReservationController extends Controller
 {
-    public function addAction(Request $request)
+    public function CommandeAction(Request $request)
     {
-        $message='';
+        $message = '';
 
         // On crée un objet commande
         $commande = new Commande();
@@ -37,43 +37,26 @@ class ReservationController extends Controller
 
             $session->set('commande', $commande);
 
-            $dateVisite = $commande->getDateCommande()->format('d.m.y');
-            $todayTs = date("d.m.y");
-
-           // $controleDate = $this->container->get('ticketing.controle_date');
-
-
-
-               // return $this->redirectToRoute('ticketing_reservation_form');
-                return $this->render('TicketingBundle:Reservation:Commande.html.twig', array(
-                    'form' => $form->createView()));
-
-
-
-
-          // return $this->render('TicketingBundle:Reservation:form.html.twig');
-
+            return $this->redirectToRoute('ticketing_reservation_ticket');
 
         }
 
-        return $this->render('TicketingBundle:Reservation:Commande.html.twig', array('message'=>$message,
+        return $this->render('TicketingBundle:Reservation:Commande.html.twig', array('message' => $message,
             'form' => $form->createView()));
     }
 
-    public function formAction(Request $request)//, Commande $commande)
+    public function TicketAction(Request $request)//, Commande $commande)
     {
-
-       // $session = $request->getSession();
 
         $commande = $request->getSession()->get('commande');
 
 
-       $nbBillet = $commande->getQtePlace() ;// $session->getQtePlace();
+        $nbBillet = $commande->getQtePlace();// $session->getQtePlace();
 
         $form = $this->createForm(GroupeVisiteurType ::class, null, ['nbBillet' => $nbBillet]);
-       // $form   = $this->get('form.factory')->create(VisiteurType::class,$visiteur1);
+        // $form   = $this->get('form.factory')->create(VisiteurType::class,$visiteur1);
 
-       if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
             $groupeVisiteur = $form->getData();
 
@@ -85,24 +68,19 @@ class ReservationController extends Controller
                 $em->persist($visiteur);
             }
 
-             $em->flush();
+            $em->flush();
 
-            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
-            // On redirige vers la page de visualisation de l'annonce nouvellement créée
-            // return $this->redirectToRoute('ticketing_reservation_form', array('id' => $commande->getId()));
+            return new Response($content);
 
-             return new Response($content);
-           // return $this->redirectToRoute('ticketing_reservation_basket', array('id' => $commande->getId()));
-            // ));
         }
 
 
-        return $this->render('TicketingBundle:Reservation:form.html.twig', array('form' => $form->createView()));
+        return $this->render('TicketingBundle:Reservation:Ticket.html.twig', array('form' => $form->createView()));
 
 
     }
 
-    public function basketAction($id, Request $request)
+    public function PaiementAction($id, Request $request)
     {
 
         $client = new Client();
@@ -129,7 +107,7 @@ class ReservationController extends Controller
         }
 
 
-        return $this->render('TicketingBundle:Reservation:basket.html.twig', array('form' => $form->createView(), 'prix' => $id));
+        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView(), 'prix' => $id));
 
     }
 }

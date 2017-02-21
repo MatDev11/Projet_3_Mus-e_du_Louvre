@@ -2,16 +2,13 @@
 
 ticketing_reservation_home:
     path:     /
-    defaults: { _controller: TicketingBundle:Reservation:add }
+    defaults: { _controller: TicketingBundle:Reservation:Commande }
 
-ticketing_reservation_form:
-    path:     /form
-    defaults: { _controller: TicketingBundle:Reservation:form }
+ticketing_reservation_ticket:
+    path:     /Ticket
+    defaults: { _controller: TicketingBundle:Reservation:Ticket }
 
-ticketing_reservation_basket:
-    path:     /basket/{id}
-    defaults: { _controller: TicketingBundle:Reservation:basket }
+ticketing_reservation_paiement:
+    path:     /Paiement
+    defaults: { _controller: TicketingBundle:Reservation:Paiement }
 
-test:
-    path:     /test
-    defaults: { _controller: TicketingBundle:Test:testFormulaire }
