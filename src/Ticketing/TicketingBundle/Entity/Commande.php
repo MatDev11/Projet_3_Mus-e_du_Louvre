@@ -2,6 +2,7 @@
 
 namespace Ticketing\TicketingBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Ticketing\TicketingBundle\Validator\JourDeFermeture;
@@ -66,6 +67,11 @@ class Commande
      */
     private $statut;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande")
+     */
+    private $visiteurs;
+
 
     /**
      * Get id
@@ -81,6 +87,7 @@ class Commande
     {
         // Par défaut,  la date d'aujourd'hui
         $this->date_commande = new \Datetime();
+        $this->visiteur= new ArrayCollection();
     }
 
     /**
@@ -204,5 +211,41 @@ class Commande
     public function getStatut()
     {
         return $this->statut;
+    }
+
+    /**
+     * Add visiteur
+     *
+     * @param \Ticketing\TicketingBundle\Entity\Visiteur $visiteur
+     * @deprecated
+     *
+     * @return Commande
+     */
+    public function addVisiteur(\Ticketing\TicketingBundle\Entity\Visiteur $visiteur)
+    {
+        $this->visiteurs[] = $visiteur;
+
+
+        return $this;
+    }
+
+    /**
+     * Remove visiteur
+     *
+     * @param \Ticketing\TicketingBundle\Entity\Visiteur $visiteur
+     */
+    public function removeVisiteur(\Ticketing\TicketingBundle\Entity\Visiteur $visiteur)
+    {
+        $this->visiteurs->removeElement($visiteur);
+    }
+
+    /**
+     * Get visiteurs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVisiteurs()
+    {
+        return $this->visiteurs;
     }
 }

@@ -5,12 +5,12 @@ namespace Ticketing\TicketingBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * visiteur
+ * Visiteur
  *
- * @ORM\Table(name="visiteur")
+ * @ORM\Table(name="Visiteur")
  * @ORM\Entity(repositoryClass="Ticketing\TicketingBundle\Repository\visiteurRepository")
  */
-class visiteur
+class Visiteur
 {
     /**
      * @var int
@@ -20,6 +20,13 @@ class visiteur
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numSerie", type="string", length=255)
+     */
+    private $numSerie;
 
     /**
      * @var string
@@ -50,17 +57,19 @@ class visiteur
     private $dateDeNaissance;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="Reduction", type="string", length=255)
+     * @ORM\Column(name="Reduction", type="boolean", length=255)
      */
     private $reduction;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Ticketing\TicketingBundle\Entity\commande")
+     * @ORM\ManyToOne(targetEntity="Ticketing\TicketingBundle\Entity\Commande")
      * @ORM\JoinColumn(nullable=false)
      */
     private $commande;
+
+
 
 
 
@@ -82,7 +91,7 @@ class visiteur
      *
      * @param string $nom
      *
-     * @return visiteur
+     * @return Visiteur
      */
     public function setNom($nom)
     {
@@ -106,7 +115,7 @@ class visiteur
      *
      * @param string $prenom
      *
-     * @return visiteur
+     * @return Visiteur
      */
     public function setPrenom($prenom)
     {
@@ -130,7 +139,7 @@ class visiteur
      *
      * @param string $pays
      *
-     * @return visiteur
+     * @return Visiteur
      */
     public function setPays($pays)
     {
@@ -154,7 +163,7 @@ class visiteur
      *
      * @param \DateTime $dateDeNaissance
      *
-     * @return visiteur
+     * @return Visiteur
      */
     public function setDateDeNaissance($dateDeNaissance)
     {
@@ -182,7 +191,7 @@ class visiteur
      *
      * @param \Ticketing\TicketingBundle\Entity\commande $commande
      *
-     * @return visiteur
+     * @return Visiteur
      */
     public function setCommande(\Ticketing\TicketingBundle\Entity\commande $commande)
     {
@@ -214,5 +223,32 @@ class visiteur
     {
         return $this->prix;
     }
+
+
+    /**
+     * Set reduction
+     *
+     * @param boolean $reduction
+     *
+     * @return Visiteur
+     */
+    public function setReduction($reduction)
+    {
+        $this->reduction = $reduction;
+
+        return $this;
+    }
+
+    /**
+     * Get reduction
+     *
+     * @return boolean
+     */
+    public function getReduction()
+    {
+        return $this->reduction;
+    }
+
+
 
 }

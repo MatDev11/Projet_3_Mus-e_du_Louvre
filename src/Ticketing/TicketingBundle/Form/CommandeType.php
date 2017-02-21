@@ -43,8 +43,8 @@ class CommandeType extends AbstractType
                     'required' => false,)
             )
 
-            ->add('statut', TextType::class)
-            ->add('Valider', SubmitType::class);
+            ->add('statut', TextType::class);
+            //->add('Valider', SubmitType::class);
     }
 
 

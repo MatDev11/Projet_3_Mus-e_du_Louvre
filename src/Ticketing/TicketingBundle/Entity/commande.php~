@@ -3,14 +3,17 @@
 namespace Ticketing\TicketingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Ticketing\TicketingBundle\Validator\JourDeFermeture;
+use Ticketing\TicketingBundle\Validator\JourFerie;
 
 /**
- * commande
+ * Commande
  *
  * @ORM\Table(name="commande")
  * @ORM\Entity(repositoryClass="Ticketing\TicketingBundle\Repository\commandeRepository")
  */
-class commande
+class Commande
 {
     /**
      * @var int
@@ -39,6 +42,12 @@ class commande
      * @var datetime
      *
      * @ORM\Column(name="date_commande", type="datetime" , nullable=true)
+     * @Assert\Range(
+     *     min ="today",
+     *     minMessage="Le jour est déjà passée !",
+     * )
+     *  @JourDeFermeture()
+     *  @JourFerie()
      */
     private $date_commande;
 
@@ -57,6 +66,11 @@ class commande
      */
     private $statut;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande")
+     */
+    private $visiteurs;
+
 
     /**
      * Get id
@@ -70,7 +84,7 @@ class commande
 
     public function __construct()
     {
-        // Par défaut, la date de l'annonce est la date d'aujourd'hui
+        // Par défaut,  la date d'aujourd'hui
         $this->date_commande = new \Datetime();
     }
 
@@ -79,7 +93,7 @@ class commande
      *
      * @param float $prix
      *
-     * @return commande
+     * @return Commande
      */
     public function setPrix($prix)
 {
@@ -105,11 +119,11 @@ class commande
      *
      * @param \DateTime $dateCommande
      *
-     * @return commande
+     * @return Commande
      */
-    public function setDateCommande($dateCommande)
+    public function setDateCommande($date_commande)
     {
-        $this->date_commande = $dateCommande;
+        $this->date_commande = $date_commande;
 
         return $this;
     }
@@ -126,11 +140,11 @@ class commande
 
 
     /**
-     * Set QtePlace
+     * Set qtePlace
      *
-     * @param integer $QtePlace
+     * @param integer $qte_place
      *
-     * @return commande
+     * @return Commande
      */
     public function setQtePlace($qte_place)
     {
@@ -154,7 +168,7 @@ class commande
      *
      * @param boolean $typeTarif
      *
-     * @return commande
+     * @return Commande
      */
     public function setTypeTarif($typeTarif)
     {
@@ -171,5 +185,29 @@ class commande
     public function getTypeTarif()
     {
         return $this->type_tarif;
+    }
+
+    /**
+     * Set statut
+     *
+     * @param string $statut
+     *
+     * @return Commande
+     */
+    public function setStatut($statut)
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * Get statut
+     *
+     * @return string
+     */
+    public function getStatut()
+    {
+        return $this->statut;
     }
 }

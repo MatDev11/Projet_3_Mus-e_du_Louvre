@@ -13,13 +13,13 @@ class JourDeFermetureValidator extends ConstraintValidator
 
     // Prend en paramètre la date de réservation
     public function validate($value, Constraint $constraint) {
-        $dayVisit = date('D', $value->getTimestamp());
+        $jourVisite = date('D', $value->getTimestamp());
         $jourDeFermeture = $this->getJourDeFermeture();
 
         foreach ($jourDeFermeture as $jourDeFermeture) {
-            if ($dayVisit == $jourDeFermeture) {
+            if ($jourVisite == $jourDeFermeture) {
                 // Déclenche l'erreur
-                $this->context->addViolation($constraint->message);
+                $this->context->addViolation($constraint->message2);
             }
         }
     }

@@ -27,10 +27,11 @@ class ReservationController extends Controller
         // On crée un objet commande
         $commande = new Commande();
         // On crée le FormBuilder grâce au service form factory
-        $form = $this->get('form.factory')->create(CommandeType::class, $commande);
+        $form = $this->createForm(CommandeType::class, $commande);
 
         // Si la requête est en POST
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
 
             $session = $request->getSession();
@@ -53,7 +54,7 @@ class ReservationController extends Controller
 
         $nbBillet = $commande->getQtePlace();// $session->getQtePlace();
 
-        $form = $this->createForm(GroupeVisiteurType ::class, null, ['nbBillet' => $nbBillet]);
+        $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet]);
         // $form   = $this->get('form.factory')->create(VisiteurType::class,$visiteur1);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
@@ -70,7 +71,7 @@ class ReservationController extends Controller
 
             $em->flush();
 
-            return new Response($content);
+            return $this->redirectToRoute('ticketing_reservation_paiement');
 
         }
 

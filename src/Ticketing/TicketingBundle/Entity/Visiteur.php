@@ -24,6 +24,13 @@ class Visiteur
     /**
      * @var string
      *
+     * @ORM\Column(name="numSerie", type="string", length=255, nullable=true)
+     */
+    private $numSerie;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="Nom", type="string", length=255)
      */
     private $nom;
@@ -57,7 +64,7 @@ class Visiteur
     private $reduction;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Ticketing\TicketingBundle\Entity\Commande")
+     * @ORM\ManyToOne(targetEntity="Ticketing\TicketingBundle\Entity\Commande",inversedBy="visiteurs")
      * @ORM\JoinColumn(nullable=false)
      */
     private $commande;
@@ -189,6 +196,7 @@ class Visiteur
     public function setCommande(\Ticketing\TicketingBundle\Entity\commande $commande)
     {
         $this->commande = $commande;
+        $commande->addVisiteur($this);
 
         return $this;
     }
@@ -244,4 +252,28 @@ class Visiteur
 
 
 
+
+    /**
+     * Set numSerie
+     *
+     * @param string $numSerie
+     *
+     * @return Visiteur
+     */
+    public function setNumSerie($numSerie)
+    {
+        $this->numSerie = $numSerie;
+
+        return $this;
+    }
+
+    /**
+     * Get numSerie
+     *
+     * @return string
+     */
+    public function getNumSerie()
+    {
+        return $this->numSerie;
+    }
 }

@@ -15,13 +15,18 @@
   <div class="row center">
           <div class="col-lg-6  ">
 
+              {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+
               {{ form(form) }}
+              <button type="submit" name="submitAction"  class="btn btn-primary">Suivant</button>
+              {{ form_end(form) }}
+
 
 
 {#  <p class="billet">Billet N°<span class="numBillet">1</span></p>
-{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
-{{ form_errors(form) }}
+
 
 
 
@@ -38,8 +43,8 @@
 <div id="ajout"></div>
 {{ form_widget(form.Valider, {'attr': {'class': 'btn btn-primary'}}) }}
 
-<a href="#" id="add_Test" class="btn btn-default">Test</a>
-  {{ form_end(form) }}#}
+<a href="#" id="add_Test" class="btn btn-default">Test</a>#}
+
 
 
 
