@@ -48,6 +48,7 @@ class ReservationController extends Controller
 
     public function TicketAction(Request $request)//, Commande $commande)
     {
+        $calculePrix = $this ->get('ticketing.CalculePrix');
 
         $commande = $request->getSession()->get('commande');
 
@@ -57,7 +58,8 @@ class ReservationController extends Controller
         $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet]);
         // $form   = $this->get('form.factory')->create(VisiteurType::class,$visiteur1);
 
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $groupeVisiteur = $form->getData();
 
@@ -65,11 +67,14 @@ class ReservationController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             foreach ($groupeVisiteur as $visiteur) {
+                $price = $this->get('ticketing.CalculePrix')->pricing($visiteur->getDateDeNaissance());//, $ticket->getDiscount());
                 $visiteur->setCommande($commande);
+                $visiteur->setPrix($price);
                 $em->persist($visiteur);
             }
-
-            $em->flush();
+            $em->persist($commande);
+           // $em->persist($commande->getVisiteurs() );
+           $em->flush();
 
             return $this->redirectToRoute('ticketing_reservation_paiement');
 
@@ -81,15 +86,12 @@ class ReservationController extends Controller
 
     }
 
-    public function PaiementAction($id, Request $request)
+    public function PaiementAction( Request $request)
     {
 
         $client = new Client();
 
-        $commande = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('TicketingBundle:commande')
-            ->find($id);
+
 
         // On crée le FormBuilder grâce au service form factory
         $form = $this->get('form.factory')->create(ClientType::class, $client);
@@ -108,7 +110,7 @@ class ReservationController extends Controller
         }
 
 
-        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView(), 'prix' => $id));
+        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView()));
 
     }
 }

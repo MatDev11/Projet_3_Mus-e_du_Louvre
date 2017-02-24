@@ -64,15 +64,18 @@ class Visiteur
     private $reduction;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Ticketing\TicketingBundle\Entity\Commande",inversedBy="visiteurs")
+     * @ORM\ManyToOne(targetEntity="Ticketing\TicketingBundle\Entity\Commande",inversedBy="visiteurs", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $commande;
 
 
 
-
-
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="prix", type="float",nullable=true)
+     */
     private $prix;
 
 
@@ -196,7 +199,7 @@ class Visiteur
     public function setCommande(\Ticketing\TicketingBundle\Entity\commande $commande)
     {
         $this->commande = $commande;
-        $commande->addVisiteur($this);
+        //$commande->addVisiteur($this);
 
         return $this;
     }

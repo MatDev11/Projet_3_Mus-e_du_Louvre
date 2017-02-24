@@ -5,6 +5,7 @@ namespace Ticketing\TicketingBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 class GroupeVisiteurType extends AbstractType
@@ -21,7 +22,9 @@ class GroupeVisiteurType extends AbstractType
 
             $builder->add('visiteur' . $i, VisiteurType::class);
 
+
         }
+        $builder ->add('submit', SubmitType::class);
     }
 
     /**

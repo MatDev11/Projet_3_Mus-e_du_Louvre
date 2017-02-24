@@ -6,5 +6,5 @@ services:
     pepert_ticketing.stripe:
         class: Ticketing\TicketingBundle\StripePayment\StripePayment
 
-    ticketing.controle_date:
-        class: Ticketing\TicketingBundle\TicketingService\ControleDate
+    ticketing.CalculePrix:
+        class: Ticketing\TicketingBundle\Service\CalculePrix

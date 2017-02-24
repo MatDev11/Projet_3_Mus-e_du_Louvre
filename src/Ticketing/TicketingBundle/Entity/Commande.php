@@ -28,9 +28,9 @@ class Commande
     /**
      * @var float
      *
-     * @ORM\Column(name="prix", type="float")
+     * @ORM\Column(name="prixTotal", type="float",nullable=true)
      */
-    private $prix;
+    private $prixTotal;
 
     /**
      * @var boolean
@@ -68,7 +68,7 @@ class Commande
     private $statut;
 
     /**
-     * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande")
+     * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande", cascade={"persist", "remove"})
      */
     private $visiteurs;
 
@@ -91,27 +91,27 @@ class Commande
     }
 
     /**
-     * Set prix
+     * Set prixTotal
      *
-     * @param float $prix
+     * @param float $prixTotal
      *
      * @return Commande
      */
-    public function setPrix($prix)
+    public function setPrixTotal($prixTotal)
 {
-    $this->prix = $prix;
+    $this->prixTotal = $prixTotal;
 
     return $this;
 }
 
     /**
-     * Get prix
+     * Get prixTotal
      *
      * @return float
      */
-    public function getPrix()
+    public function getPrixTotal()
     {
-        return $this->prix;
+        return $this->prixTotal;
     }
 
 
@@ -119,7 +119,7 @@ class Commande
     /**
      * Set dateCommande
      *
-     * @param \DateTime $dateCommande
+     * @param \DateTime $date_commande
      *
      * @return Commande
      */
@@ -225,6 +225,7 @@ class Commande
     {
         $this->visiteurs[] = $visiteur;
 
+        $visiteur->setCommande($this);
 
         return $this;
     }
