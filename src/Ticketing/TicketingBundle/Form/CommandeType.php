@@ -41,9 +41,9 @@ class CommandeType extends AbstractType
                     'label' => 'Demi jounée:',
 
                     'required' => false,)
-            )
+            );
 
-            ->add('statut', TextType::class);
+           // ->add('statut', TextType::class);
             //->add('Valider', SubmitType::class);
     }
 
