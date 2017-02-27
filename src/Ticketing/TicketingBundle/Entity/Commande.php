@@ -87,7 +87,7 @@ class Commande
     {
         // Par défaut,  la date d'aujourd'hui
         $this->date_commande = new \Datetime();
-        $this->visiteur= new ArrayCollection();
+        $this->visiteurs= new ArrayCollection();
     }
 
     /**

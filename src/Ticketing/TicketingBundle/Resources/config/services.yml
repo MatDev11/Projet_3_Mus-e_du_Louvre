@@ -8,3 +8,6 @@ services:
 
     ticketing.CalculePrix:
         class: Ticketing\TicketingBundle\Service\CalculePrix
+
+    ticketing.CalculePrixTotal:
+        class: Ticketing\TicketingBundle\Service\CalculePrixTotal

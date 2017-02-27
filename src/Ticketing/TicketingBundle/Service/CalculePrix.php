@@ -13,17 +13,18 @@ class CalculePrix
 {
 
     /**
-     * @param $birthdate
+     * @param $dateDeNaissance
+     * @param $reduction
      * @return mixed
      */
-    public function pricing(\DateTime $birthdate)//, $discount)
+    public function prixTicket(\DateTime $dateDeNaissance, $reduction)
     {
 
 
-        //  if (!$discount) {
+          if (!$reduction) {
 
         $to = new \DateTime('today');
-        $age = $birthdate->diff($to)->y;
+        $age = $dateDeNaissance->diff($to)->y;
 
         $price = 16;
 
@@ -34,12 +35,10 @@ class CalculePrix
         } elseif ($age > 60) {
             $price = 12;
         }
-
-
-        //  }
-        //  else {
-        //     $price = $repository->findOneByName("reduit");
-        //  }
+          }
+          else {
+             $price = 10;
+          }
         return $price;
     }
 

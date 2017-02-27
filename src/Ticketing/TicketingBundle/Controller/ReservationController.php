@@ -11,6 +11,8 @@ use Ticketing\TicketingBundle\Form\ClientType;
 use Ticketing\TicketingBundle\Form\VisiteurType;
 use Ticketing\TicketingBundle\Form\GroupeVisiteurType;
 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,8 +50,8 @@ class ReservationController extends Controller
 
     public function TicketAction(Request $request)//, Commande $commande)
     {
-        $calculePrix = $this ->get('ticketing.CalculePrix');
-
+        $visiteur = new Visiteur();
+        $session = $request->getSession();
         $commande = $request->getSession()->get('commande');
 
 
@@ -62,45 +64,67 @@ class ReservationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $groupeVisiteur = $form->getData();
-
+            $totalPrix1= 0;
 
             $em = $this->getDoctrine()->getManager();
 
             foreach ($groupeVisiteur as $visiteur) {
-                $price = $this->get('ticketing.CalculePrix')->pricing($visiteur->getDateDeNaissance());//, $ticket->getDiscount());
+                $price = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(),$visiteur->getReduction());//, $ticket->getDiscount());
+
                 $visiteur->setCommande($commande);
+
                 $visiteur->setPrix($price);
-                $em->persist($visiteur);
+                $session->set('visiteurs', $groupeVisiteur);
+               // $em->persist($visiteur);
+               // $totalPrix = $this->get('ticketing.CalculePrix')->calculeTotalPrix($visiteur->getPrix(),$totalPrix1);
             }
-            $em->persist($commande);
+
+            $totalPrix = $this->get('ticketing.CalculePrixTotal')->calculeTotalPrix($groupeVisiteur,$commande);
+
+            //$session->set('totalPrix', $totalPrix);
+
+
+            $commande->setPrixTotal($totalPrix);
+          //  $em->persist($commande);
            // $em->persist($commande->getVisiteurs() );
-           $em->flush();
+          // $em->flush();
 
             return $this->redirectToRoute('ticketing_reservation_paiement');
 
         }
 
 
-        return $this->render('TicketingBundle:Reservation:Ticket.html.twig', array('form' => $form->createView()));
+        return $this->render('TicketingBundle:Reservation:Ticket.html.twig', array('form' => $form->createView(),'visiteur' => $visiteur));
 
 
     }
 
     public function PaiementAction( Request $request)
     {
+        $commande = $request->getSession()->get('commande');
+        $totalPrix = $commande->getPrixTotal();
+        $visiteurs = $request->getSession()->get('visiteurs');
 
         $client = new Client();
 
 
 
         // On crée le FormBuilder grâce au service form factory
-        $form = $this->get('form.factory')->create(ClientType::class, $client);
+        $form = $this->get('form.factory')->create(ClientType::class, $client)
+
+                        ->add('submit',SubmitType::class)
+        ;
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
 
             $em = $this->getDoctrine()->getManager();
+            foreach ($visiteurs as $visiteur) {
 
+                $em->persist($visiteur);
+            }
+
+            $em->persist($commande);
             $em->persist($client);
 
 
@@ -110,7 +134,7 @@ class ReservationController extends Controller
         }
 
 
-        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView()));
+        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView(),'prix'=>$totalPrix));
 
     }
 }
