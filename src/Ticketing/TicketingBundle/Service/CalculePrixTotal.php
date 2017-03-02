@@ -12,11 +12,7 @@ namespace Ticketing\TicketingBundle\Service;
 class CalculePrixTotal
 {
 
-    /**
-     * @param $groupeVisiteur
-     * @param $commande
-     * @return Response
-     */
+
     public function calculeTotalPrix($groupeVisiteur,$commande)
     {
 

@@ -24,7 +24,7 @@ class GroupeVisiteurType extends AbstractType
 
 
         }
-        $builder ->add('submit', SubmitType::class);
+
     }
 
     /**

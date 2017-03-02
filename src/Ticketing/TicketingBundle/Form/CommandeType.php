@@ -31,7 +31,7 @@ class CommandeType extends AbstractType
                         '6' => '6'))
             )
             ->add('date_commande', DateTimeType::class, array(
-                    'label' => 'Date:',
+                    'label' => ' ',
                     'widget' => 'single_text',
                     'input' => 'datetime',
                     'format' => 'dd/MM/yyyy',
@@ -43,8 +43,6 @@ class CommandeType extends AbstractType
                     'required' => false,)
             );
 
-           // ->add('statut', TextType::class);
-            //->add('Valider', SubmitType::class);
     }
 
 

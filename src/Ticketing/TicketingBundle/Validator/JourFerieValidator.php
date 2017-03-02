@@ -19,7 +19,7 @@ class JourFerieValidator extends ConstraintValidator
         foreach ($JourFerie as $JourFerie) {
             if ($jourVisite == $JourFerie) {
                 // Déclenche l'erreur
-                $this->context->addViolation($constraint->message1);
+                $this->context->addViolation($constraint->message);
             }
         }
     }

@@ -13,16 +13,16 @@ class PaiementStripe
 {
 
 
-    public function paiementStipe($commande,$token)
+    public function paiementStripe($commande,$token)
     {
 
         \Stripe\Stripe::setApiKey("sk_test_8SR7kvJBumqoTbohzb613P1f");
 
         \Stripe\Charge::create(array(
-            "amount" => $commande->getPrix(),
+            "amount" => $commande->getPrixTotal(),
             "currency" => "eur",
             "source" => $token,
-            "description" => $commande->getName(),
+            "description" =>'paiement louvre',
         ));
 
 

@@ -9,6 +9,12 @@
             <h1>Billettrie</h1>
         </div>
     </div>
+    {% for message in app.session.flashbag.get('success') %}
+        <br/>
+        <div  class="flashbag">
+            <span>{{ message }}</span>
+        </div>
+    {% endfor %}
 
     <div class="row center">
         <div class="col-lg-6  ">
@@ -20,73 +26,26 @@
             {{ form_row(form.nom) }}
             {{ form_row(form.prenom) }}
             {{ form_row(form.email) }}
-            {{ prix }}
 
 
 
+
+
+
+                <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_rugT1oot7BOra49CLzXDUZFQ"
+                        data-amount="{{ prix }}"
+                        data-name="Louvre"
+
+                        data-locale="auto"
+                        data-currency="eur"
+                        data-allow-remember-me="false">
+                </script>
             {{ form_end(form) }}
 
-
         </div>
     </div>
-    </div>
-    <div id="wrapper">
-        <div id="container">
-            <div id="welcome">
-                <h1><span>Projet Stripe</span> Mentorat OpenClassroom</h1>
-            </div>
 
-            <div id="status">
-                <p>
-
-
-                    Vous êtes sur le point de payer un article qui vaut une petite fortune ! (995 francs, heu euros !)
-                <form action="{{ path('ticketing_reservation_paiement') }}" method="POST">
-                    <script
-                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                            data-key="pk_test_rugT1oot7BOra49CLzXDUZFQ"
-                            data-amount="{{ prix }}"
-                            data-name="oc-stripe"
-                            data-description="Widget"
-                            data-locale="auto"
-                            data-currency="eur">
-                    </script>
-                </form>
-                </p>
-            </div>
-        </div>
-    </div>
-    {#   <form action="StipePayement.php" method="POST">
-        <input
-                  id="payerStripe"
-                  name="payerStripe"
-                  class="btn btn-success"
-                  type="submit"
-                  value="Paiement"
-                  data-key="pk_test_rugT1oot7BOra49CLzXDUZFQ"
-                  data-name="Louvre"
-                  data-allow-remember-me="false"
-                  data-amount="{{ prix }}"
-                  data-currency="EUR"
-                  data-description="Paiement"
-                  data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                  data-locale="fr"
-                  data-zip-code="true">
-
-        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-
-      data-key="pk_test_rugT1oot7BOra49CLzXDUZFQ"
-      data-ne="Louvre"
-      data-allow-remember-me="false"
-      data-amount="{{ prix }}"
-      data-currency="EUR"
-      data-description="Paiement"
-      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-      data-locale="auto"
-      data-zip-code="true">
-
-
-        </script>
-    </form>#}
 {% endblock %}
 

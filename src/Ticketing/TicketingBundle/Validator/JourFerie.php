@@ -11,5 +11,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class JourFerie extends Constraint
 {
-    public $message1 = "Le musée est fermé, veuillez choisir un autre jour.";
+    public $message = "Le musée est fermé, veuillez choisir un autre jour.";
 }

@@ -9,5 +9,5 @@ services:
     ticketing.CalculePrixTotal:
         class: Ticketing\TicketingBundle\Service\CalculePrixTotal
 
-    ticketing.PaiementStipe:
+    ticketing.PaiementStripe:
         class: Ticketing\TicketingBundle\Service\PaiementStripe

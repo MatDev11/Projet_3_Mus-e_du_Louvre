@@ -24,14 +24,11 @@ class ReservationController extends Controller
 {
     public function CommandeAction(Request $request)
     {
-        $message = '';
-
-        // On crée un objet commande
         $commande = new Commande();
-        // On crée le FormBuilder grâce au service form factory
-        $form = $this->createForm(CommandeType::class, $commande);
 
-        // Si la requête est en POST
+        $form = $this->createForm(CommandeType::class, $commande)
+                     ->add('Suivant', SubmitType::class );
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -44,11 +41,10 @@ class ReservationController extends Controller
 
         }
 
-        return $this->render('TicketingBundle:Reservation:Commande.html.twig', array('message' => $message,
-            'form' => $form->createView()));
+        return $this->render('TicketingBundle:Reservation:Commande.html.twig', array('form' => $form->createView()));
     }
 
-    public function TicketAction(Request $request)//, Commande $commande)
+    public function TicketAction(Request $request)
     {
         $visiteur = new Visiteur();
         $session = $request->getSession();
@@ -57,37 +53,28 @@ class ReservationController extends Controller
 
         $nbBillet = $commande->getQtePlace();// $session->getQtePlace();
 
-        $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet]);
-        // $form   = $this->get('form.factory')->create(VisiteurType::class,$visiteur1);
+        $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet])
+                     ->add('Suivant', SubmitType::class );
+
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
             $groupeVisiteur = $form->getData();
-            $totalPrix1 = 0;
-
-            $em = $this->getDoctrine()->getManager();
 
             foreach ($groupeVisiteur as $visiteur) {
-                $price = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(), $visiteur->getReduction());//, $ticket->getDiscount());
+                $price = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(), $visiteur->getReduction());
 
                 $visiteur->setCommande($commande);
 
                 $visiteur->setPrix($price);
                 $session->set('visiteurs', $groupeVisiteur);
-                // $em->persist($visiteur);
-                // $totalPrix = $this->get('ticketing.CalculePrix')->calculeTotalPrix($visiteur->getPrix(),$totalPrix1);
             }
 
             $totalPrix = $this->get('ticketing.CalculePrixTotal')->calculeTotalPrix($groupeVisiteur, $commande);
 
-            //$session->set('totalPrix', $totalPrix);
-
-
             $commande->setPrixTotal($totalPrix);
-            //  $em->persist($commande);
-            // $em->persist($commande->getVisiteurs() );
-            // $em->flush();
+            $this->addFlash('success','Paiement ok');
 
             return $this->redirectToRoute('ticketing_reservation_paiement');
 
@@ -104,20 +91,22 @@ class ReservationController extends Controller
         $commande = $request->getSession()->get('commande');
         $totalPrix = $commande->getPrixTotal();
         $visiteurs = $request->getSession()->get('visiteurs');
-        $pb = "";
+
         $client = new Client();
 
 
         // On crée le FormBuilder grâce au service form factory
-        $form = $this->get('form.factory')->create(ClientType::class, $client)
-            ->add('submit', SubmitType::class);
+        $form = $this->createForm(ClientType::class, $client);
 
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
-            $token = $request->request->get('stripeToken');
-            $paiementStripe = $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
+        $form->handleRequest($request);
 
-            if ($paiementStripe == "ok") {
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $token = $request->get('stripeToken');
+            try {
+
+                $paiementStripe = $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
 
                 $commande->setStatut("Payée");
 
@@ -129,31 +118,20 @@ class ReservationController extends Controller
                 $em->persist($commande);
                 $em->persist($client);
                 $em->flush();
-                return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('prix' => $commande->getStatut()));
+                $this->addFlash('success','Paiement ok');
+                return $this->redirectToRoute('ticketing_reservation_home');
 
-            } else {
-                $pb = "Paiement refusé";
-                return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array( 'prix' => $pb));
+            } catch(\Stripe\Error\Card $e) {
+
+                $this->addFlash('danger','Paiement ko');
+                return $this->redirect($request->getUri());
+
             }
-
-
-            /*  $em = $this->getDoctrine()->getManager();
-            foreach ($visiteurs as $visiteur) {
-
-                $em->persist($visiteur);
-            }
-
-            $em->persist($commande);
-            $em->persist($client);
-
-
-            $em->flush();*/
-
 
         }
 
 
-        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView(), 'prix' => $pb));
+        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView(), 'prix' => $totalPrix));
 
     }
 }
