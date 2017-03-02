@@ -2,6 +2,7 @@
 
 namespace Ticketing\TicketingBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Ticketing\TicketingBundle\Validator\JourDeFermeture;
@@ -23,13 +24,19 @@ class Commande
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="num_commande", type="string", length=255)
+     */
+    private $num_commande;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="prix", type="float")
+     * @ORM\Column(name="prixTotal", type="float",nullable=true)
      */
-    private $prix;
+    private $prixTotal;
 
     /**
      * @var boolean
@@ -67,7 +74,7 @@ class Commande
     private $statut;
 
     /**
-     * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande")
+     * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande", cascade={"persist", "remove"})
      */
     private $visiteurs;
 
@@ -86,30 +93,31 @@ class Commande
     {
         // Par défaut,  la date d'aujourd'hui
         $this->date_commande = new \Datetime();
+        $this->visiteurs= new ArrayCollection();
     }
 
     /**
-     * Set prix
+     * Set prixTotal
      *
-     * @param float $prix
+     * @param float $prixTotal
      *
      * @return Commande
      */
-    public function setPrix($prix)
+    public function setPrixTotal($prixTotal)
 {
-    $this->prix = $prix;
+    $this->prixTotal = $prixTotal;
 
     return $this;
 }
 
     /**
-     * Get prix
+     * Get prixTotal
      *
      * @return float
      */
-    public function getPrix()
+    public function getPrixTotal()
     {
-        return $this->prix;
+        return $this->prixTotal;
     }
 
 
@@ -117,7 +125,7 @@ class Commande
     /**
      * Set dateCommande
      *
-     * @param \DateTime $dateCommande
+     * @param \DateTime $date_commande
      *
      * @return Commande
      */
@@ -209,5 +217,42 @@ class Commande
     public function getStatut()
     {
         return $this->statut;
+    }
+
+    /**
+     * Add visiteur
+     *
+     * @param \Ticketing\TicketingBundle\Entity\Visiteur $visiteur
+     * @deprecated
+     *
+     * @return Commande
+     */
+    public function addVisiteur(\Ticketing\TicketingBundle\Entity\Visiteur $visiteur)
+    {
+        $this->visiteurs[] = $visiteur;
+
+        $visiteur->setCommande($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove visiteur
+     *
+     * @param \Ticketing\TicketingBundle\Entity\Visiteur $visiteur
+     */
+    public function removeVisiteur(\Ticketing\TicketingBundle\Entity\Visiteur $visiteur)
+    {
+        $this->visiteurs->removeElement($visiteur);
+    }
+
+    /**
+     * Get visiteurs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVisiteurs()
+    {
+        return $this->visiteurs;
     }
 }

@@ -22,6 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class ReservationController extends Controller
 {
+
+
     public function CommandeAction(Request $request)
     {
         $commande = new Commande();
@@ -88,6 +90,7 @@ class ReservationController extends Controller
 
     public function PaiementAction(Request $request)
     {
+        $session = $request->getSession();
         $commande = $request->getSession()->get('commande');
         $totalPrix = $commande->getPrixTotal();
         $visiteurs = $request->getSession()->get('visiteurs');
@@ -96,14 +99,15 @@ class ReservationController extends Controller
 
 
         // On crée le FormBuilder grâce au service form factory
-        $form = $this->createForm(ClientType::class, $client);
+        $form = $this->createForm(ClientType::class, $client)//;
+        ->add('Suivant', SubmitType::class );
 
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $token = $request->get('stripeToken');
+          /*  $token = $request->get('stripeToken');
             try {
 
                 $paiementStripe = $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
@@ -126,7 +130,16 @@ class ReservationController extends Controller
                 $this->addFlash('danger','Paiement ko');
                 return $this->redirect($request->getUri());
 
-            }
+            }*/
+            $session->set('client', $client);
+           // $em = $this->getDoctrine()->getManager();
+          //  $em->persist($commande);
+           // $em->persist($client);
+          //  $em->flush();
+            $this->get('ticketing.EnvoieEmail')->sendMail($commande,$client, $totalPrix);
+            $this->addFlash('success','Paiement ok');
+
+          //  return $this->redirectToRoute('ticketing_reservation_home');
 
         }
 

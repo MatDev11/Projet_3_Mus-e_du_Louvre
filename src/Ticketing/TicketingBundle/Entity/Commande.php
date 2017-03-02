@@ -24,6 +24,14 @@ class Commande
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="num_commande", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Type(type="string")
+     */
+    private $num_commande;
 
     /**
      * @var float
@@ -88,6 +96,8 @@ class Commande
         // Par défaut,  la date d'aujourd'hui
         $this->date_commande = new \Datetime();
         $this->visiteurs= new ArrayCollection();
+        // Génère le numéro de commande
+        $this->num_commande = uniqid('CMD_');
     }
 
     /**
@@ -248,5 +258,29 @@ class Commande
     public function getVisiteurs()
     {
         return $this->visiteurs;
+    }
+
+    /**
+     * Set numCommande
+     *
+     * @param string $numCommande
+     *
+     * @return Commande
+     */
+    public function setNumCommande($numCommande)
+    {
+        $this->num_commande = $numCommande;
+
+        return $this;
+    }
+
+    /**
+     * Get numCommande
+     *
+     * @return string
+     */
+    public function getNumCommande()
+    {
+        return $this->num_commande;
     }
 }

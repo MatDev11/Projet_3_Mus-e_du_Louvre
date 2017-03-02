@@ -11,3 +11,9 @@ services:
 
     ticketing.PaiementStripe:
         class: Ticketing\TicketingBundle\Service\PaiementStripe
+
+    ticketing.EnvoieEmail:
+        class: Ticketing\TicketingBundle\Service\EnvoieEmail
+        arguments:
+           - "@mailer"
+           - "@templating"
