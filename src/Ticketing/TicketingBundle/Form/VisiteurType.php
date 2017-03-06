@@ -27,7 +27,8 @@ class VisiteurType extends AbstractType
                 array('preferred_choices' => array(('FR'))
                 ))
             ->add('dateDeNaissance', BirthdayType::class,
-                array('format' => 'dd/MM/yyyy'
+                array('format' => 'dd/MM/yyyy',
+                    'attr' => array('class' => 'dateNaissance')
                 ))
             ->add('reduction', CheckboxType::class, array(
                 'label' => 'Tarif reduit:',

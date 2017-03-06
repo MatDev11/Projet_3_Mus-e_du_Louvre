@@ -9,35 +9,37 @@
             <h1>Billettrie</h1>
         </div>
     </div>
+    {% for message in app.session.flashbag.get('success') %}
+        <br/>
+        <div class="flashbag">
+            <span>{{ message }}</span>
+        </div>
+    {% endfor %}
 
     <div class="row center">
 
-        <div class="col-lg-6   ">
 
-            {{ form_start(form) }}
-            <h3>Choisir une date :</h3>
+        {{ form_start(form, {'attr': {'class': 'col-lg-6'}}) }}
+        <h3>Choisir une date :</h3>
 
-            {{ form_errors(form) }}
+        {{ form_errors(form) }}
+        <br>
+        <div id="datepicker"></div>
+        <br>
 
-            <br>
-            <div id="datepicker"></div>
-            <br>
-            {{ form_errors(form.date_commande, {'attr': {'class':'text-danger'}}) }}
-            {{ form_row(form.date_commande) }}
+        {{ form_row(form.date_commande) }}
 
-            <h3>Choisir le nombre de billet :</h3>
-            <br>
+        <h3>Choisir le nombre de billet :</h3>
+        <br>
 
-            {{ form_row(form.qte_place) }}
-            {{ form_row(form.type_tarif) }}
+        {{ form_row(form.qte_place) }}
+        {{ form_row(form.type_tarif) }}
 
-            {{ form_widget(form.Suivant, {'attr': {'class': 'btn btn-block btn-primary '}}) }}
+        {{ form_widget(form.Suivant, {'attr': {'class': 'btn btn-primary '}}) }}
 
 
-            {{ form_end(form) }}
+        {{ form_end(form) }}
 
-
-        </div>
 
     </div>
 

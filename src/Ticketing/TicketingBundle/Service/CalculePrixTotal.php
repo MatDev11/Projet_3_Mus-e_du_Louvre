@@ -13,18 +13,17 @@ class CalculePrixTotal
 {
 
 
-    public function calculeTotalPrix($groupeVisiteur,$commande)
+    public function calculeTotalPrix($groupeVisiteur)
     {
 
         $totalPrix = 0;
         foreach ($groupeVisiteur as $visiteur) {
             $totalPrix = $totalPrix + $visiteur->getPrix();
-        }
-       if ($commande->getTypeTarif()=== true) {
-           $totalPrix = $totalPrix / 2;
+
         }
 
-        return $totalPrix * 100;
+
+        return $totalPrix ;
     }
 
 }

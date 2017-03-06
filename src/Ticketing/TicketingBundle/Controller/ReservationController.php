@@ -4,45 +4,30 @@ namespace Ticketing\TicketingBundle\Controller;
 
 use Ticketing\TicketingBundle\Entity\Commande;
 use Ticketing\TicketingBundle\Entity\Visiteur;
-
 use Ticketing\TicketingBundle\Entity\Client;
 use Ticketing\TicketingBundle\Form\CommandeType;
 use Ticketing\TicketingBundle\Form\ClientType;
-use Ticketing\TicketingBundle\Form\VisiteurType;
 use Ticketing\TicketingBundle\Form\GroupeVisiteurType;
-
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-
 
 class ReservationController extends Controller
 {
-
-
     public function CommandeAction(Request $request)
     {
         $commande = new Commande();
 
         $form = $this->createForm(CommandeType::class, $commande)
-                     ->add('Suivant', SubmitType::class );
+            ->add('Suivant', SubmitType::class);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $session = $request->getSession();
-
             $session->set('commande', $commande);
-
             return $this->redirectToRoute('ticketing_reservation_ticket');
-
         }
-
         return $this->render('TicketingBundle:Reservation:Commande.html.twig', array('form' => $form->createView()));
     }
 
@@ -51,41 +36,33 @@ class ReservationController extends Controller
         $visiteur = new Visiteur();
         $session = $request->getSession();
         $commande = $request->getSession()->get('commande');
-
-
-        $nbBillet = $commande->getQtePlace();// $session->getQtePlace();
+        $nbBillet = $commande->getQtePlace();
 
         $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet])
-                     ->add('Suivant', SubmitType::class );
-
+            ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary')));
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
 
             $groupeVisiteur = $form->getData();
 
-            foreach ($groupeVisiteur as $visiteur) {
-                $price = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(), $visiteur->getReduction());
-
+            foreach ($groupeVisiteur as $visiteur)
+            {
+                $price = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(), $visiteur->getReduction(), $commande);
                 $visiteur->setCommande($commande);
-
                 $visiteur->setPrix($price);
                 $session->set('visiteurs', $groupeVisiteur);
             }
 
-            $totalPrix = $this->get('ticketing.CalculePrixTotal')->calculeTotalPrix($groupeVisiteur, $commande);
-
+            $totalPrix = $this->get('ticketing.CalculePrixTotal')->calculeTotalPrix($groupeVisiteur);
             $commande->setPrixTotal($totalPrix);
-            $this->addFlash('success','Paiement ok');
+            $this->addFlash('success', 'Paiement ok');
 
             return $this->redirectToRoute('ticketing_reservation_paiement');
-
         }
 
-
         return $this->render('TicketingBundle:Reservation:Ticket.html.twig', array('form' => $form->createView(), 'visiteur' => $visiteur));
-
-
     }
 
     public function PaiementAction(Request $request)
@@ -94,57 +71,87 @@ class ReservationController extends Controller
         $commande = $request->getSession()->get('commande');
         $totalPrix = $commande->getPrixTotal();
         $visiteurs = $request->getSession()->get('visiteurs');
-
         $client = new Client();
 
-
-        // On crée le FormBuilder grâce au service form factory
         $form = $this->createForm(ClientType::class, $client)//;
-        ->add('Suivant', SubmitType::class );
-
+        ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary')));
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
 
-          /*  $token = $request->get('stripeToken');
+            /* $token = $request->get('stripeToken');
+             try {
+
+                 $paiementStripe = $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
+
+                 $commande->setStatut("Payée");
+
+                 $em = $this->getDoctrine()->getManager();
+
+                 foreach ($visiteurs as $visiteur) {
+                     $em->persist($visiteur);
+                 }
+                 $em->persist($commande);
+                 $em->persist($client);
+                 $em->flush();
+                 $this->addFlash('success','Paiement ok');
+                 return $this->redirectToRoute('ticketing_reservation_home');
+
+             } catch(\Stripe\Error\Card $e) {
+
+                 $this->addFlash('danger','Paiement ko');
+                 return $this->redirect($request->getUri());
+
+             }*/
+            $session->set('client', $client);
+
+            //   $this->get('ticketing.EnvoieEmail')->sendMail($commande,$client,$visiteurs);
+            //  $this->addFlash('success','Paiement ok');
+
+            return $this->redirectToRoute('ticketing_reservation_recapPaiement');
+
+        }
+        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView(), 'prix' => $totalPrix * 100));
+    }
+
+    public function RecapPaiementAction(Request $request)
+    {
+        $commande = $request->getSession()->get('commande');
+        $totalPrix = $commande->getPrixTotal();
+        $visiteurs = $request->getSession()->get('visiteurs');
+        $client = $request->getSession()->get('client');
+
+        $form = $this->createFormBuilder()
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $token = $request->get('stripeToken');
             try {
-
-                $paiementStripe = $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
-
+                $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
                 $commande->setStatut("Payée");
-
                 $em = $this->getDoctrine()->getManager();
 
-                foreach ($visiteurs as $visiteur) {
-                    $em->persist($visiteur);
+                foreach ($visiteurs as $visiteur)
+                {
+                    $em->persist($visiteurs);
                 }
                 $em->persist($commande);
                 $em->persist($client);
                 $em->flush();
-                $this->addFlash('success','Paiement ok');
+                $this->get('ticketing.EnvoieEmail')->sendMail($commande, $client, $visiteurs);
+                $this->addFlash('success', 'Paiement ok');
                 return $this->redirectToRoute('ticketing_reservation_home');
 
-            } catch(\Stripe\Error\Card $e) {
-
-                $this->addFlash('danger','Paiement ko');
+            } catch (\Stripe\Error\Card $e)
+            {
+                $this->addFlash('danger', 'Paiement ko');
                 return $this->redirect($request->getUri());
-
-            }*/
-            $session->set('client', $client);
-           // $em = $this->getDoctrine()->getManager();
-          //  $em->persist($commande);
-           // $em->persist($client);
-          //  $em->flush();
-            $this->get('ticketing.EnvoieEmail')->sendMail($commande,$client, $totalPrix);
-            $this->addFlash('success','Paiement ok');
-
-          //  return $this->redirectToRoute('ticketing_reservation_home');
-
+            }
         }
 
-
-        return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView(), 'prix' => $totalPrix));
+        return $this->render('TicketingBundle:Reservation:RecapPaiement.html.twig', array('form' => $form->createView(), 'commande' => $commande, 'client' => $client, 'visiteurs' => $visiteurs, 'prix' => $totalPrix * 100));
 
     }
 }

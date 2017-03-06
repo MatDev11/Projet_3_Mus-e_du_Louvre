@@ -20,7 +20,10 @@ class GroupeVisiteurType extends AbstractType
         for ($i = 1; $i < $options['nbBillet']+1; $i++) {
 
 
-            $builder->add('visiteur-' . $i, VisiteurType::class);
+            $builder->add('visiteur-' . $i, VisiteurType::class, array(
+                'label' => '',
+                'attr' => array('class' => 'col-lg-12')
+            ));
 
 
         }

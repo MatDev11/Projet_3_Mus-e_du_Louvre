@@ -11,27 +11,30 @@ namespace Ticketing\TicketingBundle\Service;
 
 class CalculePrix
 {
-    public function prixTicket(\DateTime $dateDeNaissance, $reduction)
+    public function prixTicket(\DateTime $dateDeNaissance, $reduction,$commande)
     {
           if (!$reduction) {
 
         $today = new \DateTime('today');
         $age = $dateDeNaissance->diff($today)->y;
 
-        $price = 16;
+        $prix = 16;
 
         if ($age < 4) {
-            $price = 0;
+            $prix = 0;
         } elseif ($age > 4 && $age < 12) {
-            $price = 8;
+            $prix = 8;
         } elseif ($age > 60) {
-            $price = 12;
+            $prix = 12;
         }
           }
           else {
-             $price = 10;
+              $prix = 10;
           }
-        return $price;
+        if ($commande->getTypeTarif()=== true) {
+            $prix = $prix / 2;
+        }
+        return $prix;
     }
 
 }

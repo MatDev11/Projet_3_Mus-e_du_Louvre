@@ -8,7 +8,7 @@
         background: #cccccc;
     }
     .bloc-ticket-recap {
-        border-left: 2px solid #cccccc;
+
         border-bottom: 2px solid #cccccc;
         padding: 0px 5px 0px 5px;
         margin-top: 20px;
@@ -30,15 +30,21 @@
     .recapitulatif {
         padding: 10px;
     }
-    p .recap{
+    p.recap{
         margin: 0;
     }
     </style>
 </head>
 <body background-color="#cccccc">
 
-Essai
-{#<div class="contenu">
+
+
+<div class="contenu">
+    <img src="{{ image }}" /><span>
+    <p>
+        Le Musée du Louvre vous remercie de votre réservation
+        et vous souhaite une agréable visite.
+    </p>
     <h1>Billets reservés</h1>
     <p>
         Cet email servira de billet d'entrée. Veillez a bien le conserver
@@ -52,10 +58,10 @@ Essai
     <div>
         <p class="recap">
             <strong>Vous avez réservé pour le :
-                <span class="red">{{ order.dayVisit|date("d/m/Y") }}</span>
+                <span class="red">{{commande.DateCommande|date("d/m/Y") }}</span>
             </strong>
         </p>
-        {% if order.halfDay == true %}
+        {% if commande.TypeTarif == true %}
         <p class="recap">
             <span class="fa fa-exclamation-triangle"></span>
             Billet demi-journée. Vous pouvez entrer à partir de 14h
@@ -63,35 +69,35 @@ Essai
         {% endif %}
         <p class="recap">
             <strong>Email : </strong>
-            {{ order.email }}
+            {{ client.Email }}
         </p>
         <p class="recap">
             <strong>Numéro de commande :
-                {{ order.orderNumber }}
+                {{ commande.NumCommande }}
             </strong>
         </p>
     </div>
     <h3>Billets :</h3>
     <div class="tickets-bord">
-        {% for ticket in order.tickets %}
+        {% for visiteur in visiteurs %}
         <div class="bloc-ticket-recap">
             <p class="recap">
                 <strong>Nom : </strong>
-                {{ ticket.name }}
+                {{ visiteur.Nom }}
             </p>
             <p class="recap">
                 <strong>Prénom : </strong>
-                {{ ticket.firstName }}
+                {{ visiteur.Prenom }}
             </p>
             <p class="recap">
                 <strong>Date de naissance : </strong>
-                {{ ticket.birthDate|date('d/m/Y') }}
+                {{ visiteur.DateDeNaissance|date('d/m/Y') }}
             </p>
             <p class="recap">
                 <strong>Pays : </strong>
-                {{ ticket.country }}
+                {{ visiteur.Pays }}
             </p>
-            {% if ticket.reducedPrice == true %}
+            {% if visiteur.Reduction == true %}
             <p class="recap">
                 <span class="fa fa-exclamation-triangle"></span>
                 Tarif réduit. Un justificatif sera demandé a l'entrée
@@ -99,25 +105,21 @@ Essai
             {% endif %}
             <p class="recap">
                 <strong>Prix du billet : </strong>
-                {{ ticket.ticketPrice }} €
+                {{ visiteur.Prix }} €
             </p>
         </div>
         {% endfor %}
     </div>
     <p class="recap">
         <strong>Prix Total :
-            <span class="red">{{ order.total }} €</span>
+            <span class="red">{{ commande.PrixTotal }} €</span>
         </strong>
     </p>
     </div>
-    <p>
-        Le <a href="http://www.louvre.fr">Musée du Louvre</a>
-        vous remercie de votre réservation
-        et vous souhaite une agréable visite.
-    </p>
+
     <p>
         <a href="http://www.projet3.nicolasdubouilh.fr">Billeterie du Louvre</a>
     </p>
-</div>#}
+</div>
 </body>
 </html>

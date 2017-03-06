@@ -9,42 +9,24 @@
             <h1>Billettrie</h1>
         </div>
     </div>
-    {% for message in app.session.flashbag.get('success') %}
-        <br/>
-        <div  class="flashbag">
-            <span>{{ message }}</span>
-        </div>
-    {% endfor %}
+
 
     <div class="row center">
-        <div class="col-lg-6  ">
 
-            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+            {{ form_start(form, {'attr': {'class': 'col-lg-6'}}) }}
 
             {{ form_errors(form) }}
 
             {{ form_row(form.nom) }}
+
             {{ form_row(form.prenom) }}
+
             {{ form_row(form.email) }}
 
-
-
-
-
-
-              {#  <script
-                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="pk_test_rugT1oot7BOra49CLzXDUZFQ"
-                        data-amount="{{ prix }}"
-                        data-name="Louvre"
-
-                        data-locale="auto"
-                        data-currency="eur"
-                        data-allow-remember-me="false">
-                </script>#}
             {{ form_end(form) }}
 
-        </div>
+
     </div>
 
 {% endblock %}

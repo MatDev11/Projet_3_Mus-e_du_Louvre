@@ -16,6 +16,14 @@ body {
     margin-top: 70px;
 }
 
+
+.red {
+    color: #C82D00;
+}
+.black {
+    color: #222222;
+}
+
 .navbar-brand  {
 
     padding: 0px;
@@ -38,6 +46,32 @@ body {
 
     max-width: 900px;
 
+}
+
+.form-group
+{
+.
+}
+.bloc-ticket-recap
+{
+    border-bottom: 2px solid #cccccc;
+    padding: 0px 5px 0px 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.ticket{
+
+    font-weight: normal ;
+}
+
+.margeTicket
+{
+    margin-left: 20px;
+}
+.dateNaissance
+{
+    display: flex;
+    width: 250px;
 }
 
 
