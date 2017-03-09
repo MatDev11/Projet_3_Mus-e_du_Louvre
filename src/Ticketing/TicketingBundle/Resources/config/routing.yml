@@ -12,6 +12,6 @@ ticketing_reservation_paiement:
     path:     /Paiement
     defaults: { _controller: TicketingBundle:Reservation:Paiement }
 ticketing_reservation_recapPaiement:
-    path:     /Recapitilatif_Paiement
+    path:     /Recapitulatif_Paiement
     defaults: { _controller: TicketingBundle:Reservation:RecapPaiement }
 

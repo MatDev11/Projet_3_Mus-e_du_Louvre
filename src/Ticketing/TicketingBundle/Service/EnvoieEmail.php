@@ -9,8 +9,7 @@ class EnvoieEmail
 {
     private $mailer;
     private $templating;
-    private $from = "t_mathieu9@hotmail.fr";
-
+    private $from = "louvre@louvre.fr";
     private $name = " Musée du Louvre ";
 
     public function __construct($mailer, EngineInterface $templating)
@@ -22,13 +21,12 @@ class EnvoieEmail
     protected function sendMessage($to, $subject, $commande, $visiteurs, $client)
     {
         $mail = \Swift_Message::newInstance();
-        $cid = $mail->embed(\Swift_Image::fromPath('./img/logo_Louvre.png'));
+        $logo = $mail->embed(\Swift_Image::fromPath('./img/logo_Louvre.png'));
         $mail
             ->setFrom($this->from,$this->name)
             ->setTo($to)
             ->setSubject($subject)
-            ->setBody( $this->templating->render('TicketingBundle:Reservation:Email.html.twig', array('commande' => $commande, 'image' => $cid, 'visiteurs'=>$visiteurs,'client'=>$client)))
-            //->setReplyTo($this->reply,$this->name)
+            ->setBody( $this->templating->render('TicketingBundle:Reservation:Email.html.twig', array('commande' => $commande, 'image' => $logo, 'visiteurs'=>$visiteurs,'client'=>$client)))
             ->setContentType('text/html');
 
         $this->mailer->send($mail);

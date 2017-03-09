@@ -97,7 +97,7 @@ class Commande
         $this->date_commande = new \Datetime();
         $this->visiteurs= new ArrayCollection();
         // Génère le numéro de commande
-        $this->num_commande = uniqid('CMD_');
+        $this->num_commande = uniqid();
     }
 
     /**

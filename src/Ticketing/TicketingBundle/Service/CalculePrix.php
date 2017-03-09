@@ -31,7 +31,7 @@ class CalculePrix
           else {
               $prix = 10;
           }
-        if ($commande->getTypeTarif()=== true) {
+        if ($commande === true) {
             $prix = $prix / 2;
         }
         return $prix;

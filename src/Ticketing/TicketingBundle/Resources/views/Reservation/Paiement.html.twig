@@ -14,17 +14,20 @@
     <div class="row center">
 
 
-            {{ form_start(form, {'attr': {'class': 'col-lg-6'}}) }}
+        {{ form_start(form, {'attr': {'class': 'col-lg-6'}}) }}
 
-            {{ form_errors(form) }}
+        <h3>Paiement :</h3>
 
-            {{ form_row(form.nom) }}
+        {{ form_errors(form) }}
 
-            {{ form_row(form.prenom) }}
+        {{ form_row(form.nom) }}
 
-            {{ form_row(form.email) }}
+        {{ form_row(form.prenom) }}
 
-            {{ form_end(form) }}
+        {{ form_row(form.email) }}
+
+
+        {{ form_end(form) }}
 
 
     </div>

@@ -1,51 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Confirmation réservation</title>
     <style>
-    body {
-        background: #cccccc;
-    }
-    .bloc-ticket-recap {
+        body {
+            background: #cccccc;
+        }
 
-        border-bottom: 2px solid #cccccc;
-        padding: 0px 5px 0px 5px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-    .contenu {
-        background-color: #ffffff;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        padding: 50px;
-        border-top: 5px solid #C82D00;
-        margin-left: auto;
-        margin-right: auto;
-        width: 80%;
-    }
-    .red {
-        color: #C82D00;
-    }
-    .recapitulatif {
-        padding: 10px;
-    }
-    p.recap{
-        margin: 0;
-    }
+        .bloc-ticket-recap {
+
+            border-bottom: 2px solid #cccccc;
+            padding: 0px 5px 0px 5px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .contenu {
+            background-color: #ffffff;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding: 50px;
+            border-top: 5px solid #C82D00;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
+        }
+
+        .recapitulatif {
+            padding: 10px;
+        }
+
     </style>
 </head>
 <body background-color="#cccccc">
 
 
-
 <div class="contenu">
-    <img src="{{ image }}" /><span>
+    <img src="{{ image }}"/><span>
     <p>
         Le Musée du Louvre vous remercie de votre réservation
         et vous souhaite une agréable visite.
     </p>
-    <h1>Billets reservés</h1>
     <p>
         Cet email servira de billet d'entrée. Veillez a bien le conserver
         pour être en mesure de le présenter lors de la visite.
@@ -54,72 +50,70 @@
         N'oubliez pas vos justificatifs d'identité et autres justificatifs de réduction.
     </p>
     <div class="recapitulatif">
-    <h2>Récapitulatif :</h2>
-    <div>
-        <p class="recap">
-            <strong>Vous avez réservé pour le :
-                <span class="red">{{commande.DateCommande|date("d/m/Y") }}</span>
-            </strong>
-        </p>
-        {% if commande.TypeTarif == true %}
-        <p class="recap">
-            <span class="fa fa-exclamation-triangle"></span>
-            Billet demi-journée. Vous pouvez entrer à partir de 14h
-        </p>
-        {% endif %}
-        <p class="recap">
-            <strong>Email : </strong>
-            {{ client.Email }}
-        </p>
-        <p class="recap">
-            <strong>Numéro de commande :
-                {{ commande.NumCommande }}
-            </strong>
-        </p>
-    </div>
-    <h3>Billets :</h3>
-    <div class="tickets-bord">
-        {% for visiteur in visiteurs %}
-        <div class="bloc-ticket-recap">
-            <p class="recap">
-                <strong>Nom : </strong>
-                {{ visiteur.Nom }}
-            </p>
-            <p class="recap">
-                <strong>Prénom : </strong>
-                {{ visiteur.Prenom }}
-            </p>
-            <p class="recap">
-                <strong>Date de naissance : </strong>
-                {{ visiteur.DateDeNaissance|date('d/m/Y') }}
-            </p>
-            <p class="recap">
-                <strong>Pays : </strong>
-                {{ visiteur.Pays }}
-            </p>
-            {% if visiteur.Reduction == true %}
-            <p class="recap">
-                <span class="fa fa-exclamation-triangle"></span>
-                Tarif réduit. Un justificatif sera demandé a l'entrée
-            </p>
-            {% endif %}
-            <p class="recap">
-                <strong>Prix du billet : </strong>
-                {{ visiteur.Prix }} €
-            </p>
+        <h2>Récapitulatif :</h2>
+            <div>
+                <p>
+                    <strong>Vous avez réservé pour le :
+                        <span>{{ commande.DateCommande|date("d/m/Y") }}</span>
+                    </strong>
+                </p>
+                {% if commande.TypeTarif == true %}
+                    <p class="recap">
+                    <span class="fa fa-exclamation-triangle"></span>
+                    Billet demi-journée. Vous pouvez entrer à partir de 14h
+                </p>
+                {% endif %}
+                <p class="recap">
+                    <strong>Email : </strong>
+                    {{ client.Email }}
+                </p>
+                <p>
+                    <strong>Numéro de commande :
+                        {{ commande.NumCommande }}
+                    </strong>
+                </p>
+            </div>
+        <h3>Billets :</h3>
+        <div class="tickets-bord">
+            {% for visiteur in visiteurs %}
+                <div class="bloc-ticket-recap">
+                    <p>
+                        <strong>Nom : </strong>
+                        {{ visiteur.Nom }}
+                    </p>
+                    <p>
+                        <strong>Prénom : </strong>
+                        {{ visiteur.Prenom }}
+                    </p>
+                    <p>
+                        <strong>Date de naissance : </strong>
+                        {{ visiteur.DateDeNaissance|date('d/m/Y') }}
+                    </p>
+                    <p>
+                        <strong>Pays : </strong>
+                        {{ visiteur.Pays }}
+                    </p>
+                        {% if visiteur.Reduction == true %}
+                            <p>
+                        <span class="fa fa-exclamation-triangle"></span>
+                        Tarif réduit. Un justificatif sera demandé a l'entrée
+                    </p>
+                        {% endif %}
+                        <p>
+                        <strong>Prix du billet : </strong>
+                            {{ visiteur.Prix }} €
+                    </p>
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-    <p class="recap">
-        <strong>Prix Total :
-            <span class="red">{{ commande.PrixTotal }} €</span>
-        </strong>
-    </p>
+        <p>
+            <strong>Prix Total :
+                <span>{{ commande.PrixTotal }} €</span>
+            </strong>
+        </p>
+
     </div>
 
-    <p>
-        <a href="http://www.projet3.nicolasdubouilh.fr">Billeterie du Louvre</a>
-    </p>
-</div>
+
 </body>
 </html>

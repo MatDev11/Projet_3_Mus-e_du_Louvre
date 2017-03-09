@@ -7,5 +7,5 @@ ticketing:
     prefix:   /reservation
 
 app:
-    resource: "@AppBundle/Controller/"
+    resource: "@TicketingBundle/Controller/"
     type:     annotation

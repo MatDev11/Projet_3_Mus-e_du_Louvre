@@ -18,6 +18,8 @@ class PaiementStripe
 
         \Stripe\Stripe::setApiKey("sk_test_8SR7kvJBumqoTbohzb613P1f");
 
+
+
         \Stripe\Charge::create(array(
             "amount" => $commande->getPrixTotal()*100,
             "currency" => "eur",

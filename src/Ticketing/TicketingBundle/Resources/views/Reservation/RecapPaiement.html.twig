@@ -3,121 +3,89 @@
 {% block title %}{{ parent() }} - Acceiul{% endblock %}
 
 {% block body %}
-    {#   <style>
-       body {
-           background: #cccccc;
-       }
-       .bloc-ticket-recap {
-
-           border-bottom: 2px solid #cccccc;
-           padding: 0px 5px 0px 5px;
-           margin-top: 20px;
-           margin-bottom: 20px;
-       }
-       .contenu {
-           background-color: #ffffff;
-           margin-top: 20px;
-           margin-bottom: 20px;
-           padding: 50px;
-           border-top: 5px solid #C82D00;
-           margin-left: auto;
-           margin-right: auto;
-           width: 80%;
-       }
-       .red {
-           color: #C82D00;
-       }
-       .recapitulatif {
-           padding: 10px;
-       }
-       p.recap{
-           margin: 0;
-       }
-       </style>
-   </head>
-   <body background-color="#cccccc">#}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Billettrie</h1>
 
 
+            <div class="recapitulatif">
+                 <h2>Récapitulatif :</h2>
+                 <div>
+                     <p>
+                         <strong>Vous avez réservé pour le :
+                             <span class="black">{{ commande.DateCommande|date("d/m/Y") }}</span>
+                         </strong>
+                     </p>
+                     {% if commande.TypeTarif == true %}
+                         <p class="recap">
+                             <span class="fa fa-exclamation-triangle"></span>
+                             Billet demi-journée. Vous pouvez entrer à partir de 14h
+                         </p>
+                     {% endif %}
+                     <p class="recap">
+                     <h3>Client :</h3>
+                     <strong>Nom : </strong> {{ client.Nom }}</br>
+                     <strong>Prénom : </strong> {{ client.Prenom }}</br>
+                     <strong>Email : </strong>{{ client.Email }}
+                     </p>
+                     <p class="recap">
+                         <strong>Numéro de commande :
+                             {{ commande.NumCommande }}
+                         </strong>
+                     </p>
+                 </div>
+                 <h3>Visiteur(s) :</h3>
 
-    <div class="contenu">
+                 {% for visiteur in visiteurs %}
+                     <div class="bloc-ticket-recap">
+                         <table>
+                             <tr>
+                                 <th>
+                                     <strong>Nom : </strong>
+                                     <span class="ticket">  {{ visiteur.Nom }} </span>
+                                 </th>
+                                 <th>
+                                     <strong class="margeTicket">Pays : </strong>
+                                     <span class="ticket"> {{ visiteur.Pays }}</span>
+                                 </th>
+                             </tr>
+                             <tr>
+                                 <th>
+                                     <strong>Prénom : </strong>
+                                     <span class="ticket">  {{ visiteur.Prenom }}</span>
+                                 </th>
+                                 <th>
+                                     <strong class="margeTicket">Date de naissance : </strong>
+                                     <span class="ticket">{{ visiteur.DateDeNaissance|date('d/m/Y') }}</span>
+                                 </th>
 
-        <div class="recapitulatif">
-            <h2>Récapitulatif :</h2>
-            <div>
-                <p class="recap">
-                    <strong>Vous avez réservé pour le :
-                        <span class="black">{{ commande.DateCommande|date("d/m/Y") }}</span>
-                    </strong>
-                </p>
-                {% if commande.TypeTarif == true %}
-                    <p class="recap">
-                        <span class="fa fa-exclamation-triangle"></span>
-                        Billet demi-journée. Vous pouvez entrer à partir de 14h
-                    </p>
-                {% endif %}
-                <p class="recap">
-                <h3>Client :</h3>
-                <strong>Nom : </strong> {{ client.Nom }}</br>
-                <strong>Prénom : </strong> {{ client.Prenom }}</br>
-                <strong>Email : </strong>{{ client.Email }}
-                </p>
-                <p class="recap">
-                    <strong>Numéro de commande :
-                        {{ commande.NumCommande }}
-                    </strong>
-                </p>
+                             </tr>
+                         </table>
+                         {% if visiteur.Reduction == true %}
+                             <p>
+                                 <span class="fa fa-exclamation-triangle red"></span>
+                                 Tarif réduit. Un justificatif vous sera demandé
+                             </p>
+                         {% endif %}
+
+                         <p>
+                             <strong>Prix du billet : </strong>
+                             {{ visiteur.Prix }} €
+                         </p>
+
+                     </div>
+                 {% endfor %}
+
+                 <p>
+                     <strong>Prix Total :
+                         <span class="black">{{ commande.PrixTotal }} €</span>
+                     </strong>
+                 </p>
+
             </div>
-            <h3>Visiteur(s) :</h3>
-
-            {% for visiteur in visiteurs %}
-                <div class="bloc-ticket-recap">
-                    <table>
-                        <tr>
-                            <th>
-                                <strong>Nom : </strong>
-                                <span class="ticket">  {{ visiteur.Nom }} </span>
-                            </th>
-                            <th>
-                                <strong class="margeTicket">Pays : </strong>
-                                <span class="ticket"> {{ visiteur.Pays }}</span>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <strong>Prénom : </strong>
-                                <span class="ticket">  {{ visiteur.Prenom }}</span>
-                            </th>
-                            <th>
-                                <strong class="margeTicket">Date de naissance : </strong>
-                                <span class="ticket">{{ visiteur.DateDeNaissance|date('d/m/Y') }}</span>
-                            </th>
-
-                        </tr>
-                    </table>
-                    {% if visiteur.Reduction == true %}
-                        <p class="recap">
-                            <span class="fa fa-exclamation-triangle red"></span>
-                            Tarif réduit. Un justificatif sera demandé a l'entrée
-                        </p>
-                    {% endif %}
-
-                    <p class="recap">
-                        <strong>Prix du billet : </strong>
-                        {{ visiteur.Prix }} €
-                    </p>
-
-                </div>
-            {% endfor %}
-
-            <p class="recap">
-                <strong>Prix Total :
-                    <span class="black">{{ commande.PrixTotal }} €</span>
-                </strong>
-            </p>
-        </div>
-        <div>
-            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-
+            <div>
+            {{ form_start(form) }}
+            {{ form_row(form.cvg) }}
             <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     value="paiement"
@@ -131,7 +99,8 @@
                 $(".stripe-button-el").prop('value', 'Save')
             </script>
             {{ form_end(form) }}
-        </div>
+             </div>
 
+        </div>
     </div>
 {% endblock %}

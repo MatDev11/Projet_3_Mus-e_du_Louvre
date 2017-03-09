@@ -2,6 +2,7 @@
 
 namespace Ticketing\TicketingBundle\Controller;
 
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Ticketing\TicketingBundle\Entity\Commande;
 use Ticketing\TicketingBundle\Entity\Visiteur;
 use Ticketing\TicketingBundle\Entity\Client;
@@ -19,7 +20,7 @@ class ReservationController extends Controller
         $commande = new Commande();
 
         $form = $this->createForm(CommandeType::class, $commande)
-            ->add('Suivant', SubmitType::class);
+            ->add('reserver', SubmitType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
@@ -38,20 +39,20 @@ class ReservationController extends Controller
         $commande = $request->getSession()->get('commande');
         $nbBillet = $commande->getQtePlace();
 
+
         $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet])
             ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary')));
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
-
             $groupeVisiteur = $form->getData();
 
             foreach ($groupeVisiteur as $visiteur)
             {
-                $price = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(), $visiteur->getReduction(), $commande);
+                $prix = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(), $visiteur->getReduction(), $commande->getTypeTarif());
                 $visiteur->setCommande($commande);
-                $visiteur->setPrix($price);
+                $visiteur->setPrix($prix);
                 $session->set('visiteurs', $groupeVisiteur);
             }
 
@@ -70,7 +71,6 @@ class ReservationController extends Controller
         $session = $request->getSession();
         $commande = $request->getSession()->get('commande');
         $totalPrix = $commande->getPrixTotal();
-        $visiteurs = $request->getSession()->get('visiteurs');
         $client = new Client();
 
         $form = $this->createForm(ClientType::class, $client)//;
@@ -79,34 +79,7 @@ class ReservationController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /* $token = $request->get('stripeToken');
-             try {
-
-                 $paiementStripe = $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
-
-                 $commande->setStatut("Payée");
-
-                 $em = $this->getDoctrine()->getManager();
-
-                 foreach ($visiteurs as $visiteur) {
-                     $em->persist($visiteur);
-                 }
-                 $em->persist($commande);
-                 $em->persist($client);
-                 $em->flush();
-                 $this->addFlash('success','Paiement ok');
-                 return $this->redirectToRoute('ticketing_reservation_home');
-
-             } catch(\Stripe\Error\Card $e) {
-
-                 $this->addFlash('danger','Paiement ko');
-                 return $this->redirect($request->getUri());
-
-             }*/
             $session->set('client', $client);
-
-            //   $this->get('ticketing.EnvoieEmail')->sendMail($commande,$client,$visiteurs);
-            //  $this->addFlash('success','Paiement ok');
 
             return $this->redirectToRoute('ticketing_reservation_recapPaiement');
 
@@ -122,7 +95,10 @@ class ReservationController extends Controller
         $client = $request->getSession()->get('client');
 
         $form = $this->createFormBuilder()
-            ->getForm();
+            ->add('cvg', CheckboxType::class, array(
+                'label' => 'En cochant vous acceptez les conditions générales de vente :',
+                'required' => false,))
+             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
@@ -135,7 +111,7 @@ class ReservationController extends Controller
 
                 foreach ($visiteurs as $visiteur)
                 {
-                    $em->persist($visiteurs);
+                    $em->persist($visiteur);
                 }
                 $em->persist($commande);
                 $em->persist($client);

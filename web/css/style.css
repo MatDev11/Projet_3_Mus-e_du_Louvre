@@ -88,7 +88,7 @@ a:active, a:focus { outline:none; }
     display: inline-block;
     width: 100px;
 }
-h1{
+h1 .recapitulatif{
 
     margin-left: 20px;
 
