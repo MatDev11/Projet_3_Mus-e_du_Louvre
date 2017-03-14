@@ -10,36 +10,39 @@ namespace Ticketing\TicketingBundle\Repository;
  */
 class commandeRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function myFindOne($id)
+    public function myFindQte($date_commande)
     {
         $qb = $this->createQueryBuilder('c');
 
         $qb
-            ->where('c.id = :id')
-            ->setParameter('id', $id);
+            ->select('sum(c.qte_place)')
+            ->where('c.date_commande = :date_commande')
+            ->setParameter('date_commande', $date_commande);
 
-        return $qb
-            ->getQuery()
-            ->getResult();
+        return
+            $qb
+                ->getQuery()
+                ->getSingleScalarResult();
+
     }
 
-    public function updatePrix($id,$prix)
+    public function updatePrix($id, $prix)
     {
 
         //$qB = $this->createQueryBuilder('p');
-          $qB = $this->getEntityManager()->createQueryBuilder();
-          $qB ->update('TicketingBundle:commande', 'c')
-              ->set('c.prix', '?1')
-              ->where('c.id = ?2')
-              ->setParameter(1, $prix)
-              ->setParameter(2, $id);
+        $qB = $this->getEntityManager()->createQueryBuilder();
+        $qB->update('TicketingBundle:commande', 'c')
+            ->set('c.prix', '?1')
+            ->where('c.id = ?2')
+            ->setParameter(1, $prix)
+            ->setParameter(2, $id);
 
-          return $qB->getQuery();
+        return $qB->getQuery();
 
 
-       // $query = $this->_em->createQuery('UPDATE TicketingBundle:commande c set c.prix= 8 WHERE c.id = 1');
+        // $query = $this->_em->createQuery('UPDATE TicketingBundle:commande c set c.prix= 8 WHERE c.id = 1');
         //$query->getQuery()->execute();
 
-       // return $results;
+        // return $results;
     }
 }

@@ -5,6 +5,7 @@ namespace Ticketing\TicketingBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Ticketing\TicketingBundle\Validator\JourComplet;
 use Ticketing\TicketingBundle\Validator\JourDeFermeture;
 use Ticketing\TicketingBundle\Validator\JourFerie;
 
@@ -57,6 +58,7 @@ class Commande
      * )
      *  @JourDeFermeture()
      *  @JourFerie()
+     *  @JourComplet()
      */
     private $date_commande;
 
