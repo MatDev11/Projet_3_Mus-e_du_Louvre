@@ -3,6 +3,7 @@
 namespace Ticketing\TicketingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Visiteur
@@ -39,6 +40,7 @@ class Visiteur
      * @var string
      *
      * @ORM\Column(name="Prenom", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $prenom;
 
@@ -46,6 +48,7 @@ class Visiteur
      * @var string
      *
      * @ORM\Column(name="Pays", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $pays;
 

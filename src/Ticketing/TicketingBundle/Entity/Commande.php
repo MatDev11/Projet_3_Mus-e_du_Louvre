@@ -5,6 +5,7 @@ namespace Ticketing\TicketingBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Ticketing\TicketingBundle\Validator\JourComplet;
 use Ticketing\TicketingBundle\Validator\JourDeFermeture;
 use Ticketing\TicketingBundle\Validator\JourFerie;
@@ -38,6 +39,7 @@ class Commande
      * @var float
      *
      * @ORM\Column(name="prixTotal", type="float",nullable=true)
+     *
      */
     private $prixTotal;
 
@@ -52,6 +54,7 @@ class Commande
      * @var datetime
      *
      * @ORM\Column(name="date_commande", type="datetime" , nullable=true)
+     * @Assert\NotBlank()
      * @Assert\Range(
      *     min ="today",
      *     minMessage="Le jour est déjà passée !",
@@ -67,6 +70,7 @@ class Commande
      * @var integer
      *
      * @ORM\Column(name="qte_place", type="integer" , nullable=true)
+     * @Assert\NotBlank()
      */
     private $qte_place;
 
@@ -285,4 +289,37 @@ class Commande
     {
         return $this->num_commande;
     }
+
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context) {
+
+        $date= new \DateTime('now');
+        $date_commande = date('d/m/Y', $this->date_commande->getTimestamp());
+        $heurDeVisite = date('H', $date->getTimestamp());
+        $aujourdHui =  date('d/m/Y', $date->getTimestamp());
+
+           if ($this->type_tarif == false && $aujourdHui == $date_commande) {
+               if ($heurDeVisite > 13) {
+                   $context->buildViolation('Une fois 14h passée vous devez prendre la demi journée.')
+                           ->addViolation();
+               }
+           }
+       // var_dump($heurDeVisite);
+        if ( $aujourdHui == $date_commande) {
+            if ($heurDeVisite > 15) {
+                $context->buildViolation('Le musée est fermé, veuillez choisir un autre jour. ')
+                        ->addViolation();
+            }
+        }
+
+
+    }
+
+
+
+
+
 }

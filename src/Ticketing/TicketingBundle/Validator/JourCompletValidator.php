@@ -25,7 +25,7 @@ class JourCompletValidator extends ConstraintValidator
             ->getRepository('TicketingBundle:Commande')
             ->myFindQte($value);
 
-        var_dump($Jours);
+
         if ($Jours > '1000') {
             // Déclenche l'erreur
             $this->context->addViolation($constraint->message);

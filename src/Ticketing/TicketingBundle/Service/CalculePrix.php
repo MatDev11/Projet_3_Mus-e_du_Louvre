@@ -15,8 +15,8 @@ class CalculePrix
     {
           if (!$reduction) {
 
-        $today = new \DateTime('today');
-        $age = $dateDeNaissance->diff($today)->y;
+              $AujourdHui = new \DateTime();
+        $age = $dateDeNaissance->diff($AujourdHui)->y;
 
         $prix = 16;
 

@@ -39,6 +39,11 @@ class ReservationController extends Controller
         $commande = $request->getSession()->get('commande');
         $nbBillet = $commande->getQtePlace();
 
+        if($session->has('commande') != true){
+
+            return $this->redirectToRoute('ticketing_reservation_home');
+
+        }
 
         $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet])
             ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary')));

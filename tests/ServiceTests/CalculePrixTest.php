@@ -12,15 +12,14 @@ class CalculePrixTest extends WebTestCase
     private $client;
     private $CalculePrix;
 
-    protected function setUp()
+
+
+    public function testPrixTicket()
     {
         $this->client = self::createClient();
         $container = $this->client->getContainer();
         $this->CalculePrix = $container->get('ticketing.CalculePrix');
-    }
 
-    public function testPrixTicket()
-    {
         // Tarif normal
         $date = \Datetime::createFromFormat('d/m/Y', '31/12/1986');
         $price = $this->CalculePrix->prixTicket($date, false, false);

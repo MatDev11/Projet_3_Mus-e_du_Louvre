@@ -17,16 +17,16 @@
                          </strong>
                      </p>
                      {% if commande.TypeTarif == true %}
-                         <p class="recap">
-                             <span class="fa fa-exclamation-triangle"></span>
+                         <p>
+
                              Billet demi-journée. Vous pouvez entrer à partir de 14h
                          </p>
                      {% endif %}
                      <p class="recap">
                      <h3>Client :</h3>
-                     <strong>Nom : </strong> {{ client.Nom }}</br>
-                     <strong>Prénom : </strong> {{ client.Prenom }}</br>
-                     <strong>Email : </strong>{{ client.Email }}
+                     <strong>Nom :</strong> {{ client.Nom }}</br>
+                     <strong>Prénom :</strong> {{ client.Prenom }}</br>
+                     <strong>Email :</strong>{{ client.Email }}
                      </p>
                      <p class="recap">
                          <strong>Numéro de commande :
@@ -41,7 +41,7 @@
                          <table>
                              <tr>
                                  <th>
-                                     <strong>Nom : </strong>
+                                     <strong>Nom :</strong>
                                      <span class="ticket">  {{ visiteur.Nom }} </span>
                                  </th>
                                  <th>

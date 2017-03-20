@@ -4,7 +4,7 @@ pages:
 
 ticketing:
     resource: "@TicketingBundle/Resources/config/routing.yml"
-    prefix:   /reservation
+    prefix:   /Reservation
 
 app:
     resource: "@TicketingBundle/Controller/"

@@ -13,16 +13,14 @@ class CalculePrixTotalTest extends WebTestCase
     private $client;
     private $CalculePrixTotal;
 
-    protected function setUp()
-    {
-        $this->client = self::createClient();
-        $container = $this->client->getContainer();
-        $this->CalculePrixTotal = $container->get('ticketing.CalculePrixTotal');
-    }
+
 
 
     public function testCalculeTotalPrix()
     {
+        $this->client = self::createClient();
+        $container = $this->client->getContainer();
+        $this->CalculePrixTotal = $container->get('ticketing.CalculePrixTotal');
 
         $ticket1 = new Visiteur();
         $ticket1->setPrix('5');

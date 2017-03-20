@@ -93,15 +93,20 @@
                         <strong>Pays : </strong>
                         {{ visiteur.Pays }}
                     </p>
-                        {% if visiteur.Reduction == true %}
-                            <p>
+                    {% if visiteur.Reduction == true %}
+                        <p>
                         <span class="fa fa-exclamation-triangle"></span>
                         Tarif réduit. Un justificatif sera demandé a l'entrée
                     </p>
-                        {% endif %}
+                    {% endif %}
+                    {% if commande.TypeTarif == true %}
                         <p>
+                            Billet demi-journée
+                     </p>
+                    {% endif %}
+                    <p>
                         <strong>Prix du billet : </strong>
-                            {{ visiteur.Prix }} €
+                        {{ visiteur.Prix }} €
                     </p>
                 </div>
             {% endfor %}
