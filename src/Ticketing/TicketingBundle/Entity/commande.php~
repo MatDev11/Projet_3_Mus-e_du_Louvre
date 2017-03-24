@@ -5,6 +5,8 @@ namespace Ticketing\TicketingBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Ticketing\TicketingBundle\Validator\JourComplet;
 use Ticketing\TicketingBundle\Validator\JourDeFermeture;
 use Ticketing\TicketingBundle\Validator\JourFerie;
 
@@ -28,6 +30,8 @@ class Commande
      * @var string
      *
      * @ORM\Column(name="num_commande", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Type(type="string")
      */
     private $num_commande;
 
@@ -35,6 +39,7 @@ class Commande
      * @var float
      *
      * @ORM\Column(name="prixTotal", type="float",nullable=true)
+     *
      */
     private $prixTotal;
 
@@ -49,12 +54,14 @@ class Commande
      * @var datetime
      *
      * @ORM\Column(name="date_commande", type="datetime" , nullable=true)
+     * @Assert\NotBlank()
      * @Assert\Range(
      *     min ="today",
      *     minMessage="Le jour est déjà passée !",
      * )
      *  @JourDeFermeture()
      *  @JourFerie()
+     *  @JourComplet()
      */
     private $date_commande;
 
@@ -63,6 +70,7 @@ class Commande
      * @var integer
      *
      * @ORM\Column(name="qte_place", type="integer" , nullable=true)
+     * @Assert\NotBlank()
      */
     private $qte_place;
 
@@ -77,6 +85,13 @@ class Commande
      * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande", cascade={"persist", "remove"})
      */
     private $visiteurs;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cvg", type="boolean" , nullable=true)
+     * @Assert\IsTrue()
+     */
+    private $cvg;
 
 
     /**
@@ -94,6 +109,8 @@ class Commande
         // Par défaut,  la date d'aujourd'hui
         $this->date_commande = new \Datetime();
         $this->visiteurs= new ArrayCollection();
+        // Génère le numéro de commande
+        $this->num_commande = uniqid();
     }
 
     /**
@@ -254,5 +271,81 @@ class Commande
     public function getVisiteurs()
     {
         return $this->visiteurs;
+    }
+
+    /**
+     * Set numCommande
+     *
+     * @param string $numCommande
+     *
+     * @return Commande
+     */
+    public function setNumCommande($numCommande)
+    {
+        $this->num_commande = $numCommande;
+
+        return $this;
+    }
+
+    /**
+     * Get numCommande
+     *
+     * @return string
+     */
+    public function getNumCommande()
+    {
+        return $this->num_commande;
+    }
+
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context) {
+
+        $date= new \DateTime('now');
+        $date_commande = date('d/m/Y', $this->date_commande->getTimestamp());
+        $heurDeVisite = date('H', $date->getTimestamp());
+        $aujourdHui =  date('d/m/Y', $date->getTimestamp());
+
+           if ($this->type_tarif == false && $aujourdHui == $date_commande) {
+               if ($heurDeVisite > 13) {
+                   $context->buildViolation('Une fois 14h passée vous devez prendre la demi journée.')
+                           ->addViolation();
+               }
+           }
+       // var_dump($heurDeVisite);
+        if ( $aujourdHui == $date_commande) {
+            if ($heurDeVisite > 18) {
+                $context->buildViolation('Le musée est fermé, veuillez choisir un autre jour. ')
+                        ->addViolation();
+            }
+        }
+
+
+    }
+
+    /**
+     * Set cvg
+     *
+     * @param boolean $cvg
+     *
+     * @return Commande
+     */
+    public function setCvg($cvg)
+    {
+        $this->cvg = $cvg;
+
+        return $this;
+    }
+
+    /**
+     * Get cvg
+     *
+     * @return boolean
+     */
+    public function getCvg()
+    {
+        return $this->cvg;
     }
 }

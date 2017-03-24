@@ -9,14 +9,15 @@
             <h1>Billettrie</h1>
         </div>
     </div>
+
     {% for message in app.session.flashbag.get('success') %}
         <br/>
-        <div class="flashbag">
-            <span>{{ message }}</span>
+        <div class="alert alert-success">
+            {{ message }}
         </div>
     {% endfor %}
-
     <div class="row center">
+
 
 
         {{ form_start(form, {'attr': {'class': 'col-lg-6'}}) }}
@@ -35,7 +36,7 @@
         {{ form_row(form.qte_place) }}
         {{ form_row(form.type_tarif) }}
 
-        {{ form_widget(form.reserver, {'label':'Réserver','attr': {'class': 'btn btn-primary '}}) }}
+        {{ form_widget(form.reserver, {'label':'Réserver','attr': {'class': 'btn btn-primary col-lg-3 col-sm-3 col-xs-12'}}) }}
 
 
         {{ form_end(form) }}

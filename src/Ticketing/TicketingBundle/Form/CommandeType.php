@@ -38,9 +38,9 @@ class CommandeType extends AbstractType
                     'attr' => array('class' => 'date hidden'))
             )
             ->add('type_tarif', CheckboxType::class, array(
-                    'label' => 'Demi jounée:',
+                    'label' => 'Demi-jounée:',
 
-                    'required' => false,)
+                    'required' => false)
             );
 
     }

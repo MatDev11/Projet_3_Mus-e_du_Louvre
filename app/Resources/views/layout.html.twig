@@ -34,14 +34,14 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand"> <img alt="Logo" src="{{ asset('img/logo_Louvre.png') }}" class="pull-left"></a>
-                    <a class="navbar-brand Musee" href="{{ path('ticketing_reservation_home') }}">Musée du louvre</a>
+                    <a class="navbar-brand Musee " href="{{ path('ticketing_reservation_home') }}">Musée du louvre</a>
                 </div>
             </div>
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href='#'>TARIF</a></li>
-                    <li><a data-toggle="modal" data-target="#myModal" href=""><i class="fa fa-envelope-o"></i></a></li>
+                    <li><a href='{{ path('pages_tarif') }}'>TARIF</a></li>
+                  <!--  <li><a data-toggle="modal" data-target="#myModal" href=""><i class="fa fa-envelope-o"></i></a></li>-->
                 </ul>
             </div><!--/.nav-collapse -->
         </nav>
@@ -88,6 +88,8 @@
         'js/Js.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
+
+
 
         <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"
                 integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="

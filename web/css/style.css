@@ -64,22 +64,13 @@ body {
     font-weight: normal ;
 }
 
-.margeTicket
-{
-    margin-left: 20px;
-}
+
 .dateNaissance
 {
     display: flex;
     width: 250px;
 }
 
-
-
-footer {
-  /* background-color:#222222;*/
-
-}
 [class*="col-"] { margin-bottom: 20px; }
 
 
@@ -107,34 +98,25 @@ h1 .recapitulatif{
     font-size: 1.2em;
     width:100%;
 }
-
-.MsgTarifReduit{
-
-    font-weight: bold;
-    font-size: 0.8em;
-
-   /* visibility: hidden;*/
-}
-
-/*#f{
-    padding: 5px;
-    position: absolute;
-    height: 22px;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    background-color: #ffffff;
-    clear: both;
-}*/
-
-
-
-.bob{
-     background-color: red;
+.bouton
+{
+ margin-left: 5px;
 
 }
-.bob1{
-    background-color: green;
+@media (max-width: 500px) {
 
+
+    .responsive-table-line table,
+    .responsive-table-line th,
+    .responsive-table-line tr {
+        display: block;
+    }
+}
+@media (max-width: 400px) {
+    .Musee
+    {
+        /* visibility: hidden;*/
+        font-size: 0.72em;
+
+    }
 }

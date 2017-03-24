@@ -11,6 +11,7 @@ services:
 
     ticketing.PaiementStripe:
         class: Ticketing\TicketingBundle\Service\PaiementStripe
+        arguments: ['%stripekey%']
 
     ticketing.EnvoieEmail:
         class: Ticketing\TicketingBundle\Service\EnvoieEmail

@@ -14,9 +14,21 @@ class ReservationControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/Reservation/');
         $form = $crawler->selectButton('commande[reserver]')->form();
         $client->submit($form, ['commande[date_commande]' => '28/10/2017',
-            'commande[qte_place]' => '6',
+            'commande[qte_place]' => '1',
             'commande[type_tarif]' => false]);
         $this->assertTrue($client->getResponse()->isRedirect('/Reservation/Ticket'));
+
+        $crawler= $client->followRedirect();
+
+        $form = $crawler->selectButton('groupe_visiteur[Suivant]')->form();
+        $client->submit($form, ['groupe_visiteur[visiteur-1][nom]' => 'Renard',
+            'groupe_visiteur[visiteur-1][prenom]' => 'Julien',
+            'groupe_visiteur[visiteur-1][pays]' => 'FR',
+            'groupe_visiteur[visiteur-1][dateDeNaissance][day]' => '12',
+            'groupe_visiteur[visiteur-1][dateDeNaissance][month]' => '02',
+            'groupe_visiteur[visiteur-1][dateDeNaissance][year]' => '1990',
+            'groupe_visiteur[visiteur-1][reduction]' => false]);
+        $this->assertTrue($client->getResponse()->isRedirect('/Reservation/Paiement'));
 
     }
 
@@ -59,22 +71,7 @@ class ReservationControllerTest extends WebTestCase
         $this->assertFalse($client->getResponse()->isRedirect('/Reservation/Ticket'));
     }
 
-    public function testTicket()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/Reservation/Ticket');
-        $form = $crawler->selectButton('groupe_visiteur[Suivant]')->form();
-        $client->submit($form, ['groupe_visiteur[visiteur-1][nom]' => 'Renard',
-            'groupe_visiteur[visiteur-1][prenom]' => 'Julien',
-         'groupe_visiteur[visiteur-1][pays]' => 'France',
-         'groupe_visiteur[visiteur-1][dateDeNaissance][day]' => '12',
-         'groupe_visiteur[visiteur-1][dateDeNaissance][month]' => '02',
-            'groupe_visiteur[visiteur-1][dateDeNaissance][year]' => '1990',
-            'groupe_visiteur[visiteur-1][reduction]' => false]);
-        $this->assertTrue($client->getResponse()->isRedirect('/Reservation/Ticket'));
 
-
-    }
 
     /**
      * @dataProvider urlProvider

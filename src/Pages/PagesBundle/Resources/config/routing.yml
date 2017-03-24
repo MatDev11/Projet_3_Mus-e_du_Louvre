@@ -5,3 +5,8 @@ pages_cgv:
 pages_mention_legales:
     path:     /MentionLegales
     defaults: { _controller: PagesBundle:Pages:MentionLegales }
+
+
+pages_tarif:
+    path:     /Tarif
+    defaults: { _controller: PagesBundle:Pages:Tarif }

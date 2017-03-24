@@ -13,10 +13,17 @@ class PaiementStripe
 {
 
 
+    private $stripekey;
+    public function __construct($stripekey)
+    {
+        $this->stripekey = $stripekey;
+    }
+
+
     public function paiementStripe($commande,$token)
     {
 
-        \Stripe\Stripe::setApiKey("sk_test_8SR7kvJBumqoTbohzb613P1f");
+        \Stripe\Stripe::setApiKey($this->stripekey);
 
 
 

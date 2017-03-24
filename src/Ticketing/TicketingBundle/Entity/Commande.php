@@ -85,6 +85,12 @@ class Commande
      * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande", cascade={"persist", "remove"})
      */
     private $visiteurs;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cvg", type="boolean" , nullable=true)
+     */
+     private $cvg;
 
 
     /**
@@ -309,7 +315,7 @@ class Commande
            }
        // var_dump($heurDeVisite);
         if ( $aujourdHui == $date_commande) {
-            if ($heurDeVisite > 15) {
+            if ($heurDeVisite > 18) {
                 $context->buildViolation('Le musée est fermé, veuillez choisir un autre jour. ')
                         ->addViolation();
             }
@@ -318,8 +324,27 @@ class Commande
 
     }
 
+    /**
+     * Set cvg
+     *
+     * @param boolean $cvg
+     *
+     * @return Commande
+     */
+    public function setCvg($cvg)
+    {
+        $this->cvg = $cvg;
 
+        return $this;
+    }
 
-
-
+    /**
+     * Get cvg
+     *
+     * @return boolean
+     */
+  public function getCvg()
+    {
+        return $this->cvg;
+    }
 }

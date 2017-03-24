@@ -15,4 +15,8 @@ class PagesController extends Controller
     {
         return $this->render('PagesBundle:Pages:MentionLegales.html.twig');
     }
+    public function TarifAction()
+    {
+        return $this->render('PagesBundle:Pages:Tarif.html.twig');
+    }
 }

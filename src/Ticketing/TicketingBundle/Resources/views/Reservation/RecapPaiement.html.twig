@@ -7,100 +7,150 @@
         <div class="col-lg-12">
             <h1>Billettrie</h1>
 
-
             <div class="recapitulatif">
-                 <h2>Récapitulatif :</h2>
-                 <div>
-                     <p>
-                         <strong>Vous avez réservé pour le :
-                             <span class="black">{{ commande.DateCommande|date("d/m/Y") }}</span>
-                         </strong>
-                     </p>
-                     {% if commande.TypeTarif == true %}
-                         <p>
+                <h2>Récapitulatif :</h2>
+                <div>
+                    {% for message in app.session.flashbag.get('Err') %}
+                        <br/>
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
 
-                             Billet demi-journée. Vous pouvez entrer à partir de 14h
-                         </p>
-                     {% endif %}
-                     <p class="recap">
-                     <h3>Client :</h3>
-                     <strong>Nom :</strong> {{ client.Nom }}</br>
-                     <strong>Prénom :</strong> {{ client.Prenom }}</br>
-                     <strong>Email :</strong>{{ client.Email }}
-                     </p>
-                     <p class="recap">
-                         <strong>Numéro de commande :
-                             {{ commande.NumCommande }}
-                         </strong>
-                     </p>
-                 </div>
-                 <h3>Visiteur(s) :</h3>
+                    <p>
+                        <strong>Vous avez réservé pour le :
+                            <span class="black">{{ commande.DateCommande|date("d/m/Y") }}</span>
+                        </strong>
+                    </p>
+                    {% if commande.TypeTarif == true %}
+                        <p>
+                            Billet demi-journée. Vous pouvez entrer à partir de 14h
+                        </p>
+                    {% endif %}
+                    <p class="recap">
+                    <h3>Client :</h3>
+                    <strong>Nom :</strong> {{ client.Nom }}</br>
+                    <strong>Prénom :</strong> {{ client.Prenom }}</br>
+                    <strong>Email :</strong>{{ client.Email }}
+                    </p>
+                    <p class="recap">
+                        <strong>Numéro de commande :
+                            {{ commande.NumCommande }}
+                        </strong>
+                    </p>
+                </div>
+                <h3>Visiteur(s) :</h3>
 
-                 {% for visiteur in visiteurs %}
-                     <div class="bloc-ticket-recap">
-                         <table>
-                             <tr>
-                                 <th>
-                                     <strong>Nom :</strong>
-                                     <span class="ticket">  {{ visiteur.Nom }} </span>
-                                 </th>
-                                 <th>
-                                     <strong class="margeTicket">Pays : </strong>
-                                     <span class="ticket"> {{ visiteur.Pays }}</span>
-                                 </th>
-                             </tr>
-                             <tr>
-                                 <th>
-                                     <strong>Prénom : </strong>
-                                     <span class="ticket">  {{ visiteur.Prenom }}</span>
-                                 </th>
-                                 <th>
-                                     <strong class="margeTicket">Date de naissance : </strong>
-                                     <span class="ticket">{{ visiteur.DateDeNaissance|date('d/m/Y') }}</span>
-                                 </th>
+                {% for visiteur in visiteurs %}
+                    <div class="bloc-ticket-recap">
+                        <div class="responsive-table-line">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <th>
+                                        <strong>Nom :</strong>
+                                        <span class="ticket">  {{ visiteur.Nom }} </span>
+                                    </th>
+                                    <th>
+                                        <strong class="margeTicket">Pays : </strong>
+                                        <span class="ticket"> {{ visiteur.Pays }}</span>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <strong>Prénom : </strong>
+                                        <span class="ticket">  {{ visiteur.Prenom }}</span>
+                                    </th>
+                                    <th>
+                                        <strong class="margeTicket">Date de naissance : </strong>
+                                        <span class="ticket">{{ visiteur.DateDeNaissance|date('d/m/Y') }}</span>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        {% if visiteur.Reduction == true %}
+                            <p>
+                                <span class="fa fa-exclamation-triangle red"></span>
+                                Tarif réduit. Un justificatif vous sera demandé
+                            </p>
+                        {% endif %}
 
-                             </tr>
-                         </table>
-                         {% if visiteur.Reduction == true %}
-                             <p>
-                                 <span class="fa fa-exclamation-triangle red"></span>
-                                 Tarif réduit. Un justificatif vous sera demandé
-                             </p>
-                         {% endif %}
+                        <p>
+                            <strong>Prix du billet : </strong>
+                            {{ visiteur.Prix }} €
+                        </p>
 
-                         <p>
-                             <strong>Prix du billet : </strong>
-                             {{ visiteur.Prix }} €
-                         </p>
+                    </div>
+                {% endfor %}
 
-                     </div>
-                 {% endfor %}
-
-                 <p>
-                     <strong>Prix Total :
-                         <span class="black">{{ commande.PrixTotal }} €</span>
-                     </strong>
-                 </p>
+                <p>
+                    <strong>Prix Total :
+                        <span class="black">{{ commande.PrixTotal }} €</span>
+                    </strong>
+                </p>
 
             </div>
             <div>
-            {{ form_start(form) }}
-            {{ form_row(form.cvg) }}
-            <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    value="paiement"
-                    data-key="pk_test_rugT1oot7BOra49CLzXDUZFQ"
-                    data-amount="{{ prix }}"
-                    data-name="Louvre"
-                    data-email="{{ client.Email }}"
-                    data-locale="auto"
-                    data-currency="eur"
-                    data-allow-remember-me="false">
-                $(".stripe-button-el").prop('value', 'Save')
-            </script>
-            {{ form_end(form) }}
-             </div>
+
+                {{ form_start(form) }}
+
+                <div class="checkbox">
+                    <label>
+                        <input id="cgv" type="checkbox" name="cvgTest"
+                        >
+                        J'ai lu et j'accepte les <a href="/conditions-generales" target="_blank">conditions générales de
+                            vente</a>
+                    </label>
+                </div>
+
+                <button type="button" id="boutonStripe" class="btn btn-primary col-lg-3 col-sm-3 col-xs-12 " name="StripeButton">Payer</button>
+
+                {{ form_end(form) }}
+
+            </div>
 
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $(':button').on('click', function (event) {
+                event.preventDefault();
+                if ($('#cgv').is(':checked') == true) {
+
+                    var $button = $(this),
+                        $form = $button.parents('form');
+                    var opts = $.extend({}, $button.data(), {
+                        key: 'pk_test_rugT1oot7BOra49CLzXDUZFQ',
+                        locale: 'auto',
+                        name: 'Musée du Louvre',
+                        currency: 'eur',
+                        amount: {{ prix }},
+                        email: '{{ client.Email }}',
+                        allowRememberMe: false,
+                        token: function (result) {
+                            $form.append($('<input>').attr({
+                                type: 'hidden',
+                                name: 'stripeToken',
+                                value: result.id
+                            })).submit();
+                        }
+                    });
+                    StripeCheckout.open(opts);
+                }
+                else {
+                    alert('Vous devez accepter les conditions de la vente.');
+                }
+
+            });
+
+        });
+
+
+    </script>
 {% endblock %}
