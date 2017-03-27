@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ReservationController extends Controller
 {
-    public function CommandeAction(Request $request)
+    public function commandeAction(Request $request)
     {
         $commande = new Commande();
 
@@ -32,11 +32,11 @@ class ReservationController extends Controller
         return $this->render('TicketingBundle:Reservation:Commande.html.twig', array('form' => $form->createView()));
     }
 
-    public function TicketAction(Request $request)
+    public function ticketAction(Request $request)
     {
         $session = $request->getSession();
 
-        if ($session->has('commande') != true) {
+        if ($session->has('commande') !== true) {
 
             return $this->redirectToRoute('ticketing_reservation_home');
 
@@ -97,7 +97,7 @@ class ReservationController extends Controller
         return $this->render('TicketingBundle:Reservation:Paiement.html.twig', array('form' => $form->createView()));
     }
 
-    public function RecapPaiementAction(Request $request)
+    public function recapPaiementAction(Request $request)
     {
         $session = $request->getSession();
         if ($session->has('commande') !== true || $session->has('client') !== true || $session->has('visiteurs')!= true) {

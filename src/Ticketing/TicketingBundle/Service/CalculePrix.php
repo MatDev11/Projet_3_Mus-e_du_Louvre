@@ -36,5 +36,4 @@ class CalculePrix
         }
         return $prix;
     }
-
 }

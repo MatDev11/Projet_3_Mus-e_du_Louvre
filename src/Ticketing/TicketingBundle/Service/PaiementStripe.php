@@ -14,28 +14,22 @@ class PaiementStripe
 
 
     private $stripekey;
+
     public function __construct($stripekey)
     {
         $this->stripekey = $stripekey;
     }
 
 
-    public function paiementStripe($commande,$token)
+    public function paiementStripe($commande, $token)
     {
-
         \Stripe\Stripe::setApiKey($this->stripekey);
 
-
-
         \Stripe\Charge::create(array(
-            "amount" => $commande->getPrixTotal()*100,
+            "amount" => $commande->getPrixTotal() * 100,
             "currency" => "eur",
             "source" => $token,
-            "description" =>'paiement louvre',
+            "description" => 'paiement louvre',
         ));
-
-
-
     }
-
 }

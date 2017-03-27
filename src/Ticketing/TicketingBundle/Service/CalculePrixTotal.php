@@ -11,19 +11,12 @@ namespace Ticketing\TicketingBundle\Service;
 
 class CalculePrixTotal
 {
-
-
     public function calculeTotalPrix($groupeVisiteur)
     {
-
         $totalPrix = 0;
         foreach ($groupeVisiteur as $visiteur) {
             $totalPrix = $totalPrix + $visiteur->getPrix();
-
         }
-
-
-        return $totalPrix ;
+        return $totalPrix;
     }
-
 }
