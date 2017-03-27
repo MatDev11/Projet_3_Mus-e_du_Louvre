@@ -5,7 +5,6 @@ namespace Ticketing\TicketingBundle\Validator;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 

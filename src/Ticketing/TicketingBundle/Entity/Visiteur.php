@@ -202,7 +202,7 @@ class Visiteur
     public function setCommande(\Ticketing\TicketingBundle\Entity\commande $commande)
     {
         $this->commande = $commande;
-        //$commande->addVisiteur($this);
+
 
         return $this;
     }

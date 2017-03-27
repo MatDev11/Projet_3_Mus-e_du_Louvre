@@ -3,7 +3,6 @@
 namespace Ticketing\TicketingBundle\Controller;
 
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Ticketing\TicketingBundle\Entity\Commande;
 use Ticketing\TicketingBundle\Entity\Visiteur;
 use Ticketing\TicketingBundle\Entity\Client;
@@ -101,7 +100,7 @@ class ReservationController extends Controller
     public function RecapPaiementAction(Request $request)
     {
         $session = $request->getSession();
-        if ($session->has('commande') != true || $session->has('client') != true || $session->has('visiteurs')!= true) {
+        if ($session->has('commande') !== true || $session->has('client') !== true || $session->has('visiteurs')!= true) {
 
             return $this->redirectToRoute('ticketing_reservation_home');
 

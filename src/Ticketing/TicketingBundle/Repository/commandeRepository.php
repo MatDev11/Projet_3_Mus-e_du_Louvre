@@ -29,7 +29,7 @@ class commandeRepository extends \Doctrine\ORM\EntityRepository
     public function updatePrix($id, $prix)
     {
 
-        //$qB = $this->createQueryBuilder('p');
+
         $qB = $this->getEntityManager()->createQueryBuilder();
         $qB->update('TicketingBundle:commande', 'c')
             ->set('c.prix', '?1')
@@ -40,9 +40,5 @@ class commandeRepository extends \Doctrine\ORM\EntityRepository
         return $qB->getQuery();
 
 
-        // $query = $this->_em->createQuery('UPDATE TicketingBundle:commande c set c.prix= 8 WHERE c.id = 1');
-        //$query->getQuery()->execute();
-
-        // return $results;
     }
 }

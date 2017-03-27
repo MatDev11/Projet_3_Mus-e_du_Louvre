@@ -307,14 +307,14 @@ class Commande
         $heurDeVisite = date('H', $date->getTimestamp());
         $aujourdHui =  date('d/m/Y', $date->getTimestamp());
 
-           if ($this->type_tarif == false && $aujourdHui == $date_commande) {
+           if ($this->type_tarif === false && $aujourdHui == $date_commande) {
                if ($heurDeVisite > 13) {
                    $context->buildViolation('Une fois 14h passée vous devez prendre la demi journée.')
                            ->addViolation();
                }
            }
-       // var_dump($heurDeVisite);
-        if ( $aujourdHui == $date_commande) {
+
+        if ( $aujourdHui === $date_commande) {
             if ($heurDeVisite > 18) {
                 $context->buildViolation('Le musée est fermé, veuillez choisir un autre jour. ')
                         ->addViolation();
