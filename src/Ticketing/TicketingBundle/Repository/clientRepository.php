@@ -12,3 +12,4 @@ class clientRepository extends \Doctrine\ORM\EntityRepository
 {
 
 }
+
