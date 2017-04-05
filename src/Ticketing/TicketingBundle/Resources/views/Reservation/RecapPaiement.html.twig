@@ -102,7 +102,8 @@
                     </label>
                 </div>
 
-                <button type="button" id="boutonStripe" class="btn btn-primary col-lg-3 col-sm-3 col-xs-12 " name="StripeButton">Payer</button>
+                <button type="button" id="boutonStripe" class="btn btn-primary col-lg-2 col-sm-2  col-xs-12 bouton " name="StripeButton">Payer</button>
+                <input type="button" value="Retour" class="btn btn-warning col-lg-2 col-sm-2  col-xs-12 bouton "  onclick="history.go(-1)">
 
                 {{ form_end(form) }}
 
@@ -119,8 +120,7 @@
             crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
-            $(':button').on('click', function (event) {
-                event.preventDefault();
+            $( "#boutonStripe" ).click(function() {
                 if ($('#cgv').is(':checked') == true) {
 
                     var $button = $(this),

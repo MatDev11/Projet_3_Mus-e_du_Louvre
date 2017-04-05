@@ -48,9 +48,10 @@ class ReservationController extends Controller
 
 
         $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet])
+
+            ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary col-lg-4 col-sm-4 col-xs-12 bouton')))
             ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ',
-                'onclick'=>'history.go(-1)')))
-            ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary col-lg-4 col-sm-4 col-xs-12 bouton')));
+                'onclick'=>'history.go(-1)')));
 
 
         $form->handleRequest($request);
@@ -66,7 +67,7 @@ class ReservationController extends Controller
 
             $totalPrix = $this->get('ticketing.CalculePrixTotal')->calculeTotalPrix($groupeVisiteur);
             $commande->setPrixTotal($totalPrix);
-            $this->addFlash('success', 'Paiement ok');
+
 
             return $this->redirectToRoute('ticketing_reservation_paiement');
         }
@@ -81,9 +82,10 @@ class ReservationController extends Controller
         $client = new Client();
 
         $form = $this->createForm(ClientType::class, $client)
+
+            ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary col-lg-4 col-sm-4 col-xs-12 bouton')))
             ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ',
-                'onclick'=>'history.go(-1)')))
-            ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary col-lg-4 col-sm-4 col-xs-12 bouton')));
+                'onclick'=>'history.go(-1)')));
 
 
         $form->handleRequest($request);
