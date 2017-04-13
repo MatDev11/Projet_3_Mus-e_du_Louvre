@@ -13,11 +13,15 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+
 class ReservationController extends Controller
 {
+
+
     public function commandeAction(Request $request)
     {
         $commande = new Commande();
+
 
         $form = $this->createForm(CommandeType::class, $commande)
             ->add('reserver', SubmitType::class);
@@ -34,12 +38,10 @@ class ReservationController extends Controller
 
     public function ticketAction(Request $request)
     {
-        $session = $request->getSession();
 
-        if ($session->has('commande') !== true) {
-
+        if(  $this->get('ticketing.ControleSession')->sessionTicket($request)){
+       // if ($session->has('commande') !== true) {
             return $this->redirectToRoute('ticketing_reservation_home');
-
         }
 
         $visiteur = new Visiteur();
@@ -48,10 +50,8 @@ class ReservationController extends Controller
 
 
         $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet])
-
             ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary col-lg-4 col-sm-4 col-xs-12 bouton')))
-            ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ',
-                'onclick'=>'history.go(-1)')));
+            ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ','onclick'=>'history.go(-1)')));
 
 
         $form->handleRequest($request);
@@ -62,7 +62,7 @@ class ReservationController extends Controller
                 $prix = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(), $visiteur->getReduction(), $commande->getTypeTarif());
                 $visiteur->setCommande($commande);
                 $visiteur->setPrix($prix);
-                $session->set('visiteurs', $groupeVisiteur);
+                $request->getSession()->set('visiteurs', $groupeVisiteur);
             }
 
             $totalPrix = $this->get('ticketing.CalculePrixTotal')->calculeTotalPrix($groupeVisiteur);
@@ -77,21 +77,22 @@ class ReservationController extends Controller
 
     public function PaiementAction(Request $request)
     {
-        $session = $request->getSession();
 
+        if(  $this->get('ticketing.ControleSession')->sessionPaiement($request)){
+
+            return $this->redirectToRoute('ticketing_reservation_home');
+        }
         $client = new Client();
 
         $form = $this->createForm(ClientType::class, $client)
-
             ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary col-lg-4 col-sm-4 col-xs-12 bouton')))
-            ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ',
-                'onclick'=>'history.go(-1)')));
+            ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ','onclick'=>'history.go(-1)')));
 
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $session->set('client', $client);
+            $request->getSession()->set('client', $client);
 
             return $this->redirectToRoute('ticketing_reservation_recapPaiement');
 
@@ -101,39 +102,29 @@ class ReservationController extends Controller
 
     public function recapPaiementAction(Request $request)
     {
-        $session = $request->getSession();
-        if ($session->has('commande') !== true || $session->has('client') !== true || $session->has('visiteurs')!= true) {
 
-            return $this->redirectToRoute('ticketing_reservation_home');
+      if(  $this->get('ticketing.ControleSession')->sessionRecapPaiement($request)){
+
+          return $this->redirectToRoute('ticketing_reservation_home');
 
         }
-
+        $publicStripkey =$this->get('ticketing.PaiementStripe')->publicStripkey();
         $commande = $request->getSession()->get('commande');
         $totalPrix = $commande->getPrixTotal();
         $visiteurs = $request->getSession()->get('visiteurs');
         $client = $request->getSession()->get('client');
 
-        $form = $this->createFormBuilder()
-            ->getForm();
+        $form = $this->createFormBuilder()->getForm();
 
         $form->handleRequest($request);
        if ($form->isSubmitted() && $form->isValid() && !empty($_POST['cvgTest'])) {
             $token = $request->get('stripeToken');
-            try {
-                $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
-                $commande->setStatut("Payée");
-                $commande->setCvg(true);
-                $em = $this->getDoctrine()->getManager();
+           try {
 
-                foreach ($visiteurs as $visiteur) {
-                    $em->persist($visiteur);
-                }
-                $em->persist($commande);
-                $em->persist($client);
-                $em->flush();
+                $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
+                $this->get('ticketing.PersistEntity')->persistEntity($visiteurs,$commande,$client);
                 $this->get('ticketing.EnvoieEmail')->sendMail($commande, $client, $visiteurs);
                 $this->get('session')->clear();
-                $this->get('session')->getFlashBag()->clear();
                 $this->addFlash('success', 'Paiement accepté. Le Musée du Louvre vous remercie de votre réservation et vous souhaite une agréable visite !');
                 return $this->redirectToRoute('ticketing_reservation_home');
 
@@ -147,7 +138,7 @@ class ReservationController extends Controller
             $this->addFlash('Err', 'Vous devez accepter les conditions de la vente.!');
         }
 
-        return $this->render('TicketingBundle:Reservation:RecapPaiement.html.twig', array('form' => $form->createView(), 'commande' => $commande, 'client' => $client, 'visiteurs' => $visiteurs, 'prix' => $totalPrix * 100));
+        return $this->render('TicketingBundle:Reservation:RecapPaiement.html.twig', array('form' => $form->createView(), 'commande' => $commande, 'client' => $client, 'visiteurs' => $visiteurs, 'prix' => $totalPrix * 100,'publicStripkey'=>$publicStripkey));
 
     }
 }

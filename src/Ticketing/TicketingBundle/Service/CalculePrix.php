@@ -13,24 +13,24 @@ class CalculePrix
 {
     public function prixTicket(\DateTime $dateDeNaissance, $reduction,$commande)
     {
-          if (!$reduction) {
+        if (!$reduction) {
 
-              $AujourdHui = new \DateTime();
-        $age = $dateDeNaissance->diff($AujourdHui)->y;
+            $AujourdHui = new \DateTime();
+            $age = $dateDeNaissance->diff($AujourdHui)->y;
 
-        $prix = 16;
+            $prix = 16;
 
-        if ($age < 4) {
-            $prix = 0;
-        } elseif ($age > 4 && $age < 12) {
-            $prix = 8;
-        } elseif ($age > 60) {
-            $prix = 12;
+            if ($age < 4) {
+                $prix = 0;
+            } elseif ($age >= 4 && $age <= 12) {
+                $prix = 8;
+            } elseif ($age > 60) {
+                $prix = 12;
+            }
         }
-          }
-          else {
-              $prix = 10;
-          }
+        else {
+            $prix = 10;
+        }
         if ($commande === true) {
             $prix = $prix / 2;
         }

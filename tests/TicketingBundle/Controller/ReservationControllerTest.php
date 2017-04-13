@@ -18,7 +18,7 @@ class ReservationControllerTest extends WebTestCase
             'commande[type_tarif]' => false]);
         $this->assertTrue($client->getResponse()->isRedirect('/Reservation/Ticket'));
 
-        $crawler= $client->followRedirect();
+       /* $crawler= $client->followRedirect();
 
         $form = $crawler->selectButton('groupe_visiteur[Suivant]')->form();
         $client->submit($form, ['groupe_visiteur[visiteur-1][nom]' => 'Renard',
@@ -28,7 +28,7 @@ class ReservationControllerTest extends WebTestCase
             'groupe_visiteur[visiteur-1][dateDeNaissance][month]' => '02',
             'groupe_visiteur[visiteur-1][dateDeNaissance][year]' => '1990',
             'groupe_visiteur[visiteur-1][reduction]' => false]);
-        $this->assertTrue($client->getResponse()->isRedirect('/Reservation/Paiement'));
+        $this->assertTrue($client->getResponse()->isRedirect('/Reservation/Paiement'));*/
 
     }
 

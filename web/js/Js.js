@@ -4,25 +4,13 @@ var $type = $('#commande_type_tarif'),
     $date = $currentTime.toLocaleDateString(),
     $valinputDate = $('#commande_date_commande');
 
+
 $(function () {
+
+    var disabledDays = ["01/05/2017", "25/12/2017", "01/11/2017"];
     //datepicker vue calendrier
     $('#datepicker').datepicker(
         {
-            // beforeShowDay: $.datepicker.noWeekends,
-            beforeShowDay: function (date) {
-
-                if (date.getDay() == 0 || date.getDay() == 2) { // La semaine commence à 0 = Dimanche
-
-                    return [false, ''];
-
-                } else {
-
-                    return [true, ''];
-
-                }
-            },
-
-            dateFormat: 'dd/mm/yy',
 
             //Fr datepicker
             closeText: 'Fermer',
@@ -41,17 +29,25 @@ $(function () {
             showMonthAfterYear: false,
             yearSuffix: '',//Fr datepicker
 
-            minDate: 0//Saisie à partir du jj
+            minDate: 0,//Saisie à partir du jj
+
+            beforeShowDay: function (date) {
+
+                var day = date.getDay();
+                var string = $.datepicker.formatDate('dd/mm/yy', date);
+                var isDisabled = ($.inArray(string, disabledDays) != -1);
+                //day != 0 disables all Sundays
+                return [day != 0 && day != 2 && !isDisabled];
+            }
         });
+         //MAJ du champ date
+        $('#datepicker').change(function (){
 
-    CheckHeure();
-    //MAJ du champ date
-    $('#datepicker').change(function () {
-        $('#commande_date_commande').val($('#datepicker').val());
-        CheckHeure();
-
-    });
+            $('#commande_date_commande').val($('#datepicker').val());
+            CheckHeure();
+        });
 });
+
 
 //Validator pour la demis journee
 function CheckHeure() {

@@ -69,10 +69,11 @@ class Commande
     /**
      * @var integer
      *
-     * @ORM\Column(name="qte_place", type="integer" , nullable=true)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="qtePlace", type="float",nullable=true)
+     *
      */
-    private $qte_place;
+    private $qtePlace;
+
 
     /**
      * @var string
@@ -85,13 +86,7 @@ class Commande
      * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande", cascade={"persist", "remove"})
      */
     private $visiteurs;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="cvg", type="boolean" , nullable=true)
-     * @Assert\IsTrue()
-     */
-    private $cvg;
+
 
 
     /**
@@ -139,6 +134,9 @@ class Commande
 
 
 
+
+
+
     /**
      * Set dateCommande
      *
@@ -164,29 +162,6 @@ class Commande
     }
 
 
-    /**
-     * Set qtePlace
-     *
-     * @param integer $qte_place
-     *
-     * @return Commande
-     */
-    public function setQtePlace($qte_place)
-    {
-        $this->qte_place = $qte_place;
-
-        return $this;
-    }
-
-    /**
-     * Get QtePlace
-     *
-     * @return \integer
-     */
-    public function getQtePlace()
-    {
-        return $this->qte_place;
-    }
 
     /**
      * Set typeTarif
@@ -308,14 +283,14 @@ class Commande
         $heurDeVisite = date('H', $date->getTimestamp());
         $aujourdHui =  date('d/m/Y', $date->getTimestamp());
 
-           if ($this->type_tarif == false && $aujourdHui == $date_commande) {
+           if ($this->type_tarif === false && $aujourdHui == $date_commande) {
                if ($heurDeVisite > 13) {
                    $context->buildViolation('Une fois 14h passée vous devez prendre la demi journée.')
                            ->addViolation();
                }
            }
-       // var_dump($heurDeVisite);
-        if ( $aujourdHui == $date_commande) {
+
+        if ( $aujourdHui === $date_commande) {
             if ($heurDeVisite > 18) {
                 $context->buildViolation('Le musée est fermé, veuillez choisir un autre jour. ')
                         ->addViolation();
@@ -325,27 +300,5 @@ class Commande
 
     }
 
-    /**
-     * Set cvg
-     *
-     * @param boolean $cvg
-     *
-     * @return Commande
-     */
-    public function setCvg($cvg)
-    {
-        $this->cvg = $cvg;
 
-        return $this;
-    }
-
-    /**
-     * Get cvg
-     *
-     * @return boolean
-     */
-    public function getCvg()
-    {
-        return $this->cvg;
-    }
 }

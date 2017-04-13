@@ -72,6 +72,22 @@
                                 <span class="fa fa-exclamation-triangle red"></span>
                                 Tarif réduit. Un justificatif vous sera demandé
                             </p>
+                        {% elseif visiteur.Prix == 0 %}
+                            <p>
+                                <span class="fa fa-exclamation-triangle red"></span>
+                                Tarif Enfant -4 ans. Un justificatif vous sera demandé
+                            </p>
+                        {% elseif (visiteur.Prix == 8 and commande.TypeTarif != true) or visiteur.Prix == 4  %}
+                            <p>
+                                <span class="fa fa-exclamation-triangle red"></span>
+                                Tarif Enfant +4ans. Un justificatif vous sera demandé
+                            </p>
+                        {% elseif visiteur.Prix == 12 or visiteur.Prix == 6  %}
+                            <p>
+                                <span class="fa fa-exclamation-triangle red"></span>
+                                Tarif Senior. Un justificatif vous sera demandé
+                            </p>
+
                         {% endif %}
 
                         <p>
@@ -126,7 +142,7 @@
                     var $button = $(this),
                         $form = $button.parents('form');
                     var opts = $.extend({}, $button.data(), {
-                        key: 'pk_test_rugT1oot7BOra49CLzXDUZFQ',
+                        key: '{{ publicStripkey }}',
                         locale: 'auto',
                         name: 'Musée du Louvre',
                         currency: 'eur',

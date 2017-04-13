@@ -22,12 +22,7 @@ class Visiteur
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numSerie", type="string", length=255, nullable=true)
-     */
-    private $numSerie;
+
 
     /**
      * @var string
@@ -231,7 +226,6 @@ class Visiteur
         return $this->prix;
     }
 
-
     /**
      * Set reduction
      *
@@ -257,29 +251,4 @@ class Visiteur
     }
 
 
-
-
-    /**
-     * Set numSerie
-     *
-     * @param string $numSerie
-     *
-     * @return Visiteur
-     */
-    public function setNumSerie($numSerie)
-    {
-        $this->numSerie = $numSerie;
-
-        return $this;
-    }
-
-    /**
-     * Get numSerie
-     *
-     * @return string
-     */
-    public function getNumSerie()
-    {
-        return $this->numSerie;
-    }
 }

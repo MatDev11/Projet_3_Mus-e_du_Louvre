@@ -9,9 +9,20 @@ services:
     ticketing.CalculePrixTotal:
         class: Ticketing\TicketingBundle\Service\CalculePrixTotal
 
+    ticketing.ControlePaiement:
+            class: Ticketing\TicketingBundle\Service\ControlePaiement
+
+    ticketing.ControleSession:
+                class: Ticketing\TicketingBundle\Service\ControleSession
+
+    ticketing.PersistEntity:
+                class: Ticketing\TicketingBundle\Service\PersistEntity
+                arguments: ["@doctrine.orm.entity_manager"]
+
     ticketing.PaiementStripe:
         class: Ticketing\TicketingBundle\Service\PaiementStripe
-        arguments: ['%stripekey%']
+        arguments: ['%stripekey%','%publicStripkey%']
+
 
     ticketing.EnvoieEmail:
         class: Ticketing\TicketingBundle\Service\EnvoieEmail

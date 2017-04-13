@@ -12,33 +12,26 @@ class commandeRepository extends \Doctrine\ORM\EntityRepository
 {
     public function myFindQte($date_commande)
     {
-        $qb = $this->createQueryBuilder('c');
-
-        $qb
-            ->select('sum(c.qte_place)')
-            ->where('c.date_commande = :date_commande')
-            ->setParameter('date_commande', $date_commande);
-
-        return
-            $qb
-                ->getQuery()
-                ->getSingleScalarResult();
+         $query = $this->_em->createQuery('SELECT COUNT(v.nom )from TicketingBundle:Visiteur v JOIN TicketingBundle:Commande c WHERE c.id = v.commande and c.date_commande= :date_commande');
+         $query->setParameter('date_commande', $date_commande);
+         return $query->getSingleScalarResult();
 
     }
-
-    public function updatePrix($id, $prix)
+    public function jourComplet( $date_commande)
     {
+        $qb = $this->createQueryBuilder('c');
 
 
-        $qB = $this->getEntityManager()->createQueryBuilder();
-        $qB->update('TicketingBundle:commande', 'c')
-            ->set('c.prix', '?1')
-            ->where('c.id = ?2')
-            ->setParameter(1, $prix)
-            ->setParameter(2, $id);
 
-        return $qB->getQuery();
+        $qb ->select('COUNT(v.nom)')
+            ->from('TicketingBundle:Visiteur', 'v')
+            ->where('c.date_commande = :date_commande')
+            ->setParameter('date_commande', $date_commande)
+            ->andWhere('c.id=v.commande');
 
-
+        return $qb
+            ->getQuery()
+            ->getResult()
+            ;
     }
 }

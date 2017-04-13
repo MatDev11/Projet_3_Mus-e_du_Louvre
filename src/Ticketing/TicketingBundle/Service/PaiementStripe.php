@@ -14,12 +14,17 @@ class PaiementStripe
 
 
     private $stripekey;
+    private $publicStripkey;
 
-    public function __construct($stripekey)
+    public function __construct($stripekey,$publicStripkey)
     {
         $this->stripekey = $stripekey;
+        $this->publicStripkey = $publicStripkey;
     }
-
+    public function publicStripkey()
+    {
+        return $this->publicStripkey;
+    }
 
     public function paiementStripe($commande, $token)
     {

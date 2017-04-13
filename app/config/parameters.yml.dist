@@ -16,5 +16,6 @@ parameters:
     mailer_password:   ~
     mailer_encryption: ssl
     stripekey: privat_key
+    publicStripkey: public_key
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt

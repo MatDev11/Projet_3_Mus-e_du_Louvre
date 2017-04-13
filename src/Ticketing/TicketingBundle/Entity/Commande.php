@@ -66,13 +66,9 @@ class Commande
     private $date_commande;
 
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="qte_place", type="integer" , nullable=true)
-     * @Assert\NotBlank()
-     */
-    private $qte_place;
+   
+    private $qtePlace;
+
 
     /**
      * @var string
@@ -85,12 +81,7 @@ class Commande
      * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande", cascade={"persist", "remove"})
      */
     private $visiteurs;
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="cvg", type="boolean" , nullable=true)
-     */
-     private $cvg;
+
 
 
     /**
@@ -138,6 +129,9 @@ class Commande
 
 
 
+
+
+
     /**
      * Set dateCommande
      *
@@ -163,29 +157,6 @@ class Commande
     }
 
 
-    /**
-     * Set qtePlace
-     *
-     * @param integer $qte_place
-     *
-     * @return Commande
-     */
-    public function setQtePlace($qte_place)
-    {
-        $this->qte_place = $qte_place;
-
-        return $this;
-    }
-
-    /**
-     * Get QtePlace
-     *
-     * @return \integer
-     */
-    public function getQtePlace()
-    {
-        return $this->qte_place;
-    }
 
     /**
      * Set typeTarif
@@ -324,27 +295,29 @@ class Commande
 
     }
 
+
+
     /**
-     * Set cvg
+     * Set qtePlace
      *
-     * @param boolean $cvg
+     * @param float $qtePlace
      *
      * @return Commande
      */
-    public function setCvg($cvg)
+    public function setQtePlace($qtePlace)
     {
-        $this->cvg = $cvg;
+        $this->qtePlace = $qtePlace;
 
         return $this;
     }
 
     /**
-     * Get cvg
+     * Get qtePlace
      *
-     * @return boolean
+     * @return float
      */
-  public function getCvg()
+    public function getQtePlace()
     {
-        return $this->cvg;
+        return $this->qtePlace;
     }
 }
