@@ -12,18 +12,18 @@ class commandeRepository extends \Doctrine\ORM\EntityRepository
 {
     public function myFindQte($date_commande)
     {
-         $query = $this->_em->createQuery('SELECT COUNT(v.nom )from TicketingBundle:Visiteur v JOIN TicketingBundle:Commande c WHERE c.id = v.commande and c.date_commande= :date_commande');
-         $query->setParameter('date_commande', $date_commande);
-         return $query->getSingleScalarResult();
+        $query = $this->_em->createQuery('SELECT COUNT(v.nom )from TicketingBundle:Visiteur v JOIN TicketingBundle:Commande c WHERE c.id = v.commande and c.date_commande= :date_commande');
+        $query->setParameter('date_commande', $date_commande);
+        return $query->getSingleScalarResult();
 
     }
-    public function jourComplet( $date_commande)
+
+    public function jourComplet($date_commande)
     {
         $qb = $this->createQueryBuilder('c');
 
 
-
-        $qb ->select('COUNT(v.nom)')
+        $qb->select('COUNT(v.nom)')
             ->from('TicketingBundle:Visiteur', 'v')
             ->where('c.date_commande = :date_commande')
             ->setParameter('date_commande', $date_commande)
@@ -31,7 +31,6 @@ class commandeRepository extends \Doctrine\ORM\EntityRepository
 
         return $qb
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 }

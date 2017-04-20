@@ -11,10 +11,10 @@ namespace Ticketing\TicketingBundle\Service;
 
 class ControleSession
 {
-    public function sessionTicket($request)
+    public function controleSession1($request)
     {
         $session = $request->getSession();
-        if ($session->has('commande') !== true ) {
+        if ($session->has('commande') !== true) {
 
             return true;
 
@@ -22,21 +22,10 @@ class ControleSession
 
     }
 
-    public function sessionPaiement($request)
+    public function controleSession2($request)
     {
         $session = $request->getSession();
-        if ($session->has('commande') !== true || $session->has('visiteurs') !== true ) {
-
-            return true;
-
-        }
-
-    }
-
-    public function sessionRecapPaiement($request)
-    {
-        $session = $request->getSession();
-        if ($session->has('commande') !== true || $session->has('client') !== true || $session->has('visiteurs')!= true) {
+        if ($session->has('commande') !== true || $session->has('client') !== true) {
 
             return true;
 

@@ -12,7 +12,8 @@ class JourDeFermetureValidator extends ConstraintValidator
     private $jourDeFermeture = ['Sun', 'Tue'];
 
     // Prend en paramètre la date de réservation
-    public function validate($value, Constraint $constraint) {
+    public function validate($value, Constraint $constraint)
+    {
         $jourVisite = date('D', $value->getTimestamp());
         $jourDeFermeture = $this->getJourDeFermeture();
 
@@ -24,7 +25,8 @@ class JourDeFermetureValidator extends ConstraintValidator
         }
     }
 
-    public function getJourDeFermeture() {
+    public function getJourDeFermeture()
+    {
         return $this->jourDeFermeture;
     }
 }

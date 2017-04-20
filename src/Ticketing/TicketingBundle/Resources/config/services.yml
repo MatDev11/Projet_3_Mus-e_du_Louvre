@@ -6,6 +6,11 @@ services:
     ticketing.CalculePrix:
         class: Ticketing\TicketingBundle\Service\CalculePrix
 
+    ticketing.SessionTicket:
+        class: Ticketing\TicketingBundle\Service\SessionTicket
+        arguments:
+          - "@ticketing.CalculePrix"
+
     ticketing.CalculePrixTotal:
         class: Ticketing\TicketingBundle\Service\CalculePrixTotal
 
@@ -21,7 +26,11 @@ services:
 
     ticketing.PaiementStripe:
         class: Ticketing\TicketingBundle\Service\PaiementStripe
-        arguments: ['%stripekey%','%publicStripkey%']
+        arguments:
+          - '%stripekey%'
+          - '%publicStripkey%'
+          - '@ticketing.EnvoieEmail'
+          - '@ticketing.PersistEntity'
 
 
     ticketing.EnvoieEmail:

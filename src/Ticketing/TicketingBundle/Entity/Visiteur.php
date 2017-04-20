@@ -23,7 +23,6 @@ class Visiteur
     private $id;
 
 
-
     /**
      * @var string
      *
@@ -66,7 +65,6 @@ class Visiteur
      * @ORM\JoinColumn(nullable=false)
      */
     private $commande;
-
 
 
     /**
@@ -182,9 +180,6 @@ class Visiteur
     {
         return $this->dateDeNaissance;
     }
-
-
-
 
 
     /**

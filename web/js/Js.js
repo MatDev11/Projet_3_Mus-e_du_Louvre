@@ -7,7 +7,7 @@ var $type = $('#commande_type_tarif'),
 
 $(function () {
 
-    var disabledDays = ["01/05/2017", "25/12/2017", "01/11/2017"];
+    var disabledDays = ['01/05', '25/12', '01/11'];
     //datepicker vue calendrier
     $('#datepicker').datepicker(
         {
@@ -30,24 +30,27 @@ $(function () {
             yearSuffix: '',//Fr datepicker
 
             minDate: 0,//Saisie à partir du jj
+            beforeShowDay:disableSpecificDates
 
-            beforeShowDay: function (date) {
 
-                var day = date.getDay();
-                var string = $.datepicker.formatDate('dd/mm/yy', date);
-                var isDisabled = ($.inArray(string, disabledDays) != -1);
-                //day != 0 disables all Sundays
-                return [day != 0 && day != 2 && !isDisabled];
-            }
-        });
-         //MAJ du champ date
-        $('#datepicker').change(function (){
-
-            $('#commande_date_commande').val($('#datepicker').val());
-            CheckHeure();
-        });
 });
 
+    function disableSpecificDates(date) {
+
+        var day = date.getDay();
+        var string = $.datepicker.formatDate('dd/mm', date);
+        var isDisabled = ($.inArray(string, disabledDays) != -1);
+        //day != 0 disables all Sundays
+        return [day != 0 && day != 2 && !isDisabled];
+    }
+});
+
+//MAJ du champ date
+$('#datepicker').change(function (){
+
+    $('#commande_date_commande').val($('#datepicker').val());
+    CheckHeure();
+});
 
 //Validator pour la demis journee
 function CheckHeure() {

@@ -77,12 +77,12 @@
                                 <span class="fa fa-exclamation-triangle red"></span>
                                 Tarif Enfant -4 ans. Un justificatif vous sera demandé
                             </p>
-                        {% elseif (visiteur.Prix == 8 and commande.TypeTarif != true) or visiteur.Prix == 4  %}
+                        {% elseif (visiteur.Prix == 8 and commande.TypeTarif != true) or visiteur.Prix == 4 %}
                             <p>
                                 <span class="fa fa-exclamation-triangle red"></span>
                                 Tarif Enfant +4ans. Un justificatif vous sera demandé
                             </p>
-                        {% elseif visiteur.Prix == 12 or visiteur.Prix == 6  %}
+                        {% elseif visiteur.Prix == 12 or visiteur.Prix == 6 %}
                             <p>
                                 <span class="fa fa-exclamation-triangle red"></span>
                                 Tarif Senior. Un justificatif vous sera demandé
@@ -118,8 +118,11 @@
                     </label>
                 </div>
 
-                <button type="button" id="boutonStripe" class="btn btn-primary col-lg-2 col-sm-2  col-xs-12 bouton " name="StripeButton">Payer</button>
-                <input type="button" value="Retour" class="btn btn-warning col-lg-2 col-sm-2  col-xs-12 bouton "  onclick="history.go(-1)">
+                <button type="button" id="boutonStripe" class="btn btn-primary col-lg-2 col-sm-2  col-xs-12 bouton "
+                        name="StripeButton">Payer
+                </button>
+                <input type="button" value="Retour" class="btn btn-warning col-lg-2 col-sm-2  col-xs-12 bouton "
+                       onclick="history.go(-1)">
 
                 {{ form_end(form) }}
 
@@ -136,7 +139,7 @@
             crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
-            $( "#boutonStripe" ).click(function() {
+            $("#boutonStripe").click(function () {
                 if ($('#cgv').is(':checked') == true) {
 
                     var $button = $(this),

@@ -14,12 +14,13 @@ use Doctrine\ORM\EntityManagerInterface;
 class PersistEntity
 {
     private $em;
+
     public function __construct(EntityManagerInterface $em)
     {
-        $this->em =$em;
+        $this->em = $em;
     }
 
-    public function persistEntity($visiteurs,$commande,$client)
+    public function persistEntity($visiteurs, $commande, $client)
     {
 
         foreach ($visiteurs as $visiteur) {
@@ -30,7 +31,6 @@ class PersistEntity
         $this->em->flush();
 
     }
-
 
 
 }

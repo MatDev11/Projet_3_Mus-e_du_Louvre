@@ -59,29 +59,20 @@ class Commande
      *     min ="today",
      *     minMessage="Le jour est déjà passée !",
      * )
-     *  @JourDeFermeture()
-     *  @JourFerie()
-     *  @JourComplet()
+     * @JourDeFermeture()
+     * @JourFerie()
+     * @JourComplet()
      */
     private $date_commande;
 
 
-   
     private $qtePlace;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="statut", type="string" , nullable=true)
-     */
-    private $statut;
 
     /**
      * @ORM\OneToMany(targetEntity="Ticketing\TicketingBundle\Entity\Visiteur", mappedBy="commande", cascade={"persist", "remove"})
      */
     private $visiteurs;
-
 
 
     /**
@@ -98,7 +89,7 @@ class Commande
     {
         // Par défaut,  la date d'aujourd'hui
         $this->date_commande = new \Datetime();
-        $this->visiteurs= new ArrayCollection();
+        $this->visiteurs = new ArrayCollection();
         // Génère le numéro de commande
         $this->num_commande = uniqid();
     }
@@ -111,11 +102,11 @@ class Commande
      * @return Commande
      */
     public function setPrixTotal($prixTotal)
-{
-    $this->prixTotal = $prixTotal;
+    {
+        $this->prixTotal = $prixTotal;
 
-    return $this;
-}
+        return $this;
+    }
 
     /**
      * Get prixTotal
@@ -126,10 +117,6 @@ class Commande
     {
         return $this->prixTotal;
     }
-
-
-
-
 
 
     /**
@@ -157,7 +144,6 @@ class Commande
     }
 
 
-
     /**
      * Set typeTarif
      *
@@ -182,29 +168,6 @@ class Commande
         return $this->type_tarif;
     }
 
-    /**
-     * Set statut
-     *
-     * @param string $statut
-     *
-     * @return Commande
-     */
-    public function setStatut($statut)
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
-
-    /**
-     * Get statut
-     *
-     * @return string
-     */
-    public function getStatut()
-    {
-        return $this->statut;
-    }
 
     /**
      * Add visiteur
@@ -271,30 +234,30 @@ class Commande
     /**
      * @Assert\Callback
      */
-    public function validate(ExecutionContextInterface $context) {
+    public function validate(ExecutionContextInterface $context)
+    {
 
-        $date= new \DateTime('now');
+        $date = new \DateTime('now');
         $date_commande = date('d/m/Y', $this->date_commande->getTimestamp());
         $heurDeVisite = date('H', $date->getTimestamp());
-        $aujourdHui =  date('d/m/Y', $date->getTimestamp());
+        $aujourdHui = date('d/m/Y', $date->getTimestamp());
 
-           if ($this->type_tarif === false && $aujourdHui == $date_commande) {
-               if ($heurDeVisite > 13) {
-                   $context->buildViolation('Une fois 14h passée vous devez prendre la demi journée.')
-                           ->addViolation();
-               }
-           }
+        if ($this->type_tarif === false && $aujourdHui == $date_commande) {
+            if ($heurDeVisite > 13) {
+                $context->buildViolation('Une fois 14h passée vous devez prendre la demi journée.')
+                    ->addViolation();
+            }
+        }
 
-        if ( $aujourdHui === $date_commande) {
+        if ($aujourdHui === $date_commande) {
             if ($heurDeVisite > 18) {
                 $context->buildViolation('Le musée est fermé, veuillez choisir un autre jour. ')
-                        ->addViolation();
+                    ->addViolation();
             }
         }
 
 
     }
-
 
 
     /**

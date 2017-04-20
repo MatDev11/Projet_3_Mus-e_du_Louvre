@@ -43,9 +43,6 @@ class Client
     private $email;
 
 
-
-
-
     /**
      * Get id
      *

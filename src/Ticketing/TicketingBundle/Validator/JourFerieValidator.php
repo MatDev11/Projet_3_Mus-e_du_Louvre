@@ -9,10 +9,11 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class JourFerieValidator extends ConstraintValidator
 {
-    private $JourFerie  = ['01/05', '01/11', '25/12'];
+    private $JourFerie = ['01/05', '01/11', '25/12'];
 
 
-    public function validate($value, Constraint $constraint) {
+    public function validate($value, Constraint $constraint)
+    {
         $jourVisite = date('d/m', $value->getTimestamp());
         $JourFerie = $this->getJourFerie();
 
@@ -24,7 +25,8 @@ class JourFerieValidator extends ConstraintValidator
         }
     }
 
-    public function getJourFerie() {
+    public function getJourFerie()
+    {
         return $this->JourFerie;
     }
 }

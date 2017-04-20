@@ -2,16 +2,16 @@
 
 namespace Ticketing\TicketingBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
+use Ticketing\TicketingBundle\Entity\Client;
 use Ticketing\TicketingBundle\Entity\Commande;
 use Ticketing\TicketingBundle\Entity\Visiteur;
-use Ticketing\TicketingBundle\Entity\Client;
-use Ticketing\TicketingBundle\Form\CommandeType;
 use Ticketing\TicketingBundle\Form\ClientType;
+use Ticketing\TicketingBundle\Form\CommandeType;
 use Ticketing\TicketingBundle\Form\GroupeVisiteurType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 
 class ReservationController extends Controller
@@ -39,8 +39,8 @@ class ReservationController extends Controller
     public function ticketAction(Request $request)
     {
 
-        if(  $this->get('ticketing.ControleSession')->sessionTicket($request)){
-       // if ($session->has('commande') !== true) {
+        if ($this->get('ticketing.ControleSession')->controleSession1($request)) {
+
             return $this->redirectToRoute('ticketing_reservation_home');
         }
 
@@ -51,23 +51,14 @@ class ReservationController extends Controller
 
         $form = $this->createForm(GroupeVisiteurType::class, null, ['nbBillet' => $nbBillet])
             ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary col-lg-4 col-sm-4 col-xs-12 bouton')))
-            ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ','onclick'=>'history.go(-1)')));
+            ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ', 'onclick' => 'history.go(-1)')));
 
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $groupeVisiteur = $form->getData();
 
-            foreach ($groupeVisiteur as $visiteur) {
-                $prix = $this->get('ticketing.CalculePrix')->prixTicket($visiteur->getDateDeNaissance(), $visiteur->getReduction(), $commande->getTypeTarif());
-                $visiteur->setCommande($commande);
-                $visiteur->setPrix($prix);
-                $request->getSession()->set('visiteurs', $groupeVisiteur);
-            }
-
-            $totalPrix = $this->get('ticketing.CalculePrixTotal')->calculeTotalPrix($groupeVisiteur);
-            $commande->setPrixTotal($totalPrix);
-
+            $this->get('ticketing.SessionTicket')->sessionTicket($groupeVisiteur, $request, $commande);
 
             return $this->redirectToRoute('ticketing_reservation_paiement');
         }
@@ -78,7 +69,7 @@ class ReservationController extends Controller
     public function PaiementAction(Request $request)
     {
 
-        if(  $this->get('ticketing.ControleSession')->sessionPaiement($request)){
+        if ($this->get('ticketing.ControleSession')->controleSession1($request)) {
 
             return $this->redirectToRoute('ticketing_reservation_home');
         }
@@ -86,7 +77,7 @@ class ReservationController extends Controller
 
         $form = $this->createForm(ClientType::class, $client)
             ->add('Suivant', SubmitType::class, array('attr' => array('class' => 'btn btn-primary col-lg-4 col-sm-4 col-xs-12 bouton')))
-            ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ','onclick'=>'history.go(-1)')));
+            ->add('Retour', ButtonType::class, array('attr' => array('class' => 'btn btn-warning col-lg-4 col-sm-4  col-xs-12 bouton ', 'onclick' => 'history.go(-1)')));
 
 
         $form->handleRequest($request);
@@ -103,42 +94,36 @@ class ReservationController extends Controller
     public function recapPaiementAction(Request $request)
     {
 
-      if(  $this->get('ticketing.ControleSession')->sessionRecapPaiement($request)){
+        if ($this->get('ticketing.ControleSession')->controleSession2($request)) {
 
-          return $this->redirectToRoute('ticketing_reservation_home');
+            return $this->redirectToRoute('ticketing_reservation_home');
 
         }
-        $publicStripkey =$this->get('ticketing.PaiementStripe')->publicStripkey();
+        $publicStripkey = $this->get('ticketing.PaiementStripe')->publicStripkey();
         $commande = $request->getSession()->get('commande');
-        $totalPrix = $commande->getPrixTotal();
-        $visiteurs = $request->getSession()->get('visiteurs');
         $client = $request->getSession()->get('client');
 
         $form = $this->createFormBuilder()->getForm();
 
         $form->handleRequest($request);
-       if ($form->isSubmitted() && $form->isValid() && !empty($_POST['cvgTest'])) {
+        if ($form->isSubmitted() && $form->isValid() && !empty($_POST['cvgTest'])) {
             $token = $request->get('stripeToken');
-           try {
-
-                $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token);
-                $this->get('ticketing.PersistEntity')->persistEntity($visiteurs,$commande,$client);
-                $this->get('ticketing.EnvoieEmail')->sendMail($commande, $client, $visiteurs);
+            try {
+                $this->get('ticketing.PaiementStripe')->paiementStripe($commande, $token, $client);
                 $this->get('session')->clear();
                 $this->addFlash('success', 'Paiement accepté. Le Musée du Louvre vous remercie de votre réservation et vous souhaite une agréable visite !');
                 return $this->redirectToRoute('ticketing_reservation_home');
 
             } catch (\Stripe\Error\Card $e) {
-                $this->addFlash('Err', 'Paiement refuser réessayer!');
+
                 return $this->redirect($request->getUri());
             }
         }
-        if ($form->isSubmitted()  && empty($_POST['cvgTest']))
-        {
+        if ($form->isSubmitted() && empty($_POST['cvgTest'])) {
             $this->addFlash('Err', 'Vous devez accepter les conditions de la vente.!');
         }
 
-        return $this->render('TicketingBundle:Reservation:RecapPaiement.html.twig', array('form' => $form->createView(), 'commande' => $commande, 'client' => $client, 'visiteurs' => $visiteurs, 'prix' => $totalPrix * 100,'publicStripkey'=>$publicStripkey));
+        return $this->render('TicketingBundle:Reservation:RecapPaiement.html.twig', array('form' => $form->createView(), 'commande' => $commande, 'client' => $client, 'visiteurs' => $commande->getVisiteurs(), 'prix' => $commande->getPrixTotal() * 100, 'publicStripkey' => $publicStripkey));
 
     }
 }
